@@ -398,7 +398,7 @@ function startGame(){
     playerScore: 0, oppScore: 0,
     skillLevel: document.querySelector('.skill-btn.active')?.dataset.skill || 'intermediate',
     playerServing: true,
-    serveRoll: null, serveMakeInfo: null,
+    serveRoll: null, serveMakeInfo: null, serveTarget: null,
     playerPos: 'D', oppPos: 'D',
     playerRush: 'comfortable', oppRush: 'comfortable',
     nextPlayerComfortable: false, nextOppComfortable: false,
@@ -491,8 +491,15 @@ function renderServe(){
     </div>
   </div>
   ${serving ? `
+  ${!G.serveTarget ? `
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">PICK YOUR SERVE TARGET</div>
+  <div class="target-grid">
+    <button class="target-btn" onclick="pickServeTarget('LD')"><div class="target-code">LD</div><div class="target-name">Left Deep</div></button>
+    <button class="target-btn" onclick="pickServeTarget('CD')"><div class="target-code">CD</div><div class="target-name">Center Deep</div></button>
+    <button class="target-btn" onclick="pickServeTarget('RD')"><div class="target-code">RD</div><div class="target-name">Right Deep</div></button>
+  </div>` : `
   <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Drive from Deep</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
+    <div class="make-row"><span class="make-lbl">Forehand Drive → ${G.serveTarget}</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
     <hr class="div">
     <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${mi.perfectMax}</span></div>
     <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${mi.attackableMin}–${mi.attackableMax}</span></div>
@@ -501,11 +508,16 @@ function renderServe(){
   <div class="dice-wrap"><div class="dice" id="serve-dice">${rolled?roll:'?'}</div></div>
   ${rolled?'':` <button class="roll-btn" onclick="rollServe()">ROLL SERVE</button>`}
   ${rolled?`<button class="continue-btn" onclick="resolveServe()">SEE RESULT →</button>`:''}
-  ` : `<button class="continue-btn" onclick="rollOppServe()">OPPONENT SERVES →</button>`}`;
+  `}` : `<button class="continue-btn" onclick="rollOppServe()">OPPONENT SERVES →</button>`}`;
+}
+
+function pickServeTarget(target){
+  G.serveTarget = target;
+  render();
 }
 
 function rollServe(){
-  const mi = getMakeInfo('drive','D','CD','comfortable',G.skillLevel);
+  const mi = getMakeInfo('drive','D',G.serveTarget||'CD','comfortable',G.skillLevel);
   G.serveRoll = rollD12();
   G.serveMakeInfo = mi;
   G.totalShots++;
@@ -521,7 +533,7 @@ function resolveServe(){
   else if(outcome==='attackable') G.totalAttackable++;
   else G.totalMiss++;
 
-  logShot('You','drive (serve)','CD',G.serveRoll,outcome,'D','D');
+  logShot('You','drive (serve)',G.serveTarget||'CD',G.serveRoll,outcome,'D','D');
   G.serveRoll=null;
 
   if(outcome==='miss'){
@@ -1212,7 +1224,7 @@ function renderPoint(){
 function nextRally(){
   // Both start at D on serve — server rolls, receiver returns before advancing to K
   G.playerPos='D'; G.oppPos='D';
-  G.serveRoll=null; G.serveMakeInfo=null;
+  G.serveRoll=null; G.serveMakeInfo=null; G.serveTarget=null;
   G.playerRush='comfortable'; G.oppRush='comfortable';
   G.nextPlayerComfortable=false; G.nextOppComfortable=false;
   G.rallyShot=0;
