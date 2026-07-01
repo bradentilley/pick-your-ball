@@ -217,17 +217,17 @@ hr.div{border:none;border-top:1px solid var(--border);margin:3px 0}
       <rect x="30" y="215" width="260" height="195" fill="url(#cg2)"/>
       <!-- Outer court lines -->
       <rect x="30" y="20" width="260" height="390" fill="none" stroke="white" stroke-width="2.5"/>
-      <!-- Opp kitchen line -->
+      <!-- Opp kitchen line (NVZ) -->
       <line x1="30" y1="153" x2="290" y2="153" stroke="white" stroke-width="2"/>
-      <!-- Player kitchen line -->
+      <!-- Player kitchen line (NVZ) -->
       <line x1="30" y1="277" x2="290" y2="277" stroke="white" stroke-width="2"/>
-      <!-- Center service line -->
-      <line x1="160" y1="153" x2="160" y2="277" stroke="white" stroke-width="1.5"/>
-      <!-- Zone dividers on opp side (dashed guide lines) -->
+      <!-- Center service lines (opp service boxes only — no line in kitchen zones) -->
+      <line x1="160" y1="20" x2="160" y2="153" stroke="white" stroke-width="1.5"/>
+      <line x1="160" y1="277" x2="160" y2="410" stroke="white" stroke-width="1.5"/>
+      <!-- Zone guide lines (dashed) — stop at kitchen line, never enter kitchen -->
       <line x1="30" y1="85" x2="290" y2="85" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
-      <line x1="30" y1="150" x2="290" y2="150" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
-      <line x1="117" y1="20" x2="117" y2="215" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
-      <line x1="203" y1="20" x2="203" y2="215" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <line x1="117" y1="20" x2="117" y2="153" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <line x1="203" y1="20" x2="203" y2="153" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
       <!-- Net posts -->
       <rect x="22" y="204" width="8" height="22" fill="#7a7a7a" rx="2"/>
       <rect x="290" y="204" width="8" height="22" fill="#7a7a7a" rx="2"/>
@@ -362,7 +362,8 @@ function updateCourtSVG(){
   if(!g)return;
   const pp=G.playerPos,op=G.oppPos,rush=G.playerRush,skill=G.skillLevel;
   const fromK=pp==='K';
-  const midActive=op==='M'&&!fromK;
+  const midActive=true;
+  const serveState=G.phase==='serve'||G.phase==='opp-serve-return';
   const showZones=['player-zone','player-shot-for-zone','player-serve-return'].includes(G.phase)||
     (G.phase==='serve'&&G.playerServing&&!G.serveRoll);
   const servePickMode=G.phase==='serve'&&G.playerServing&&!G.serveTarget;
@@ -393,7 +394,7 @@ function updateCourtSVG(){
           label=code;pctLine=(fromK?'DINK ':'DROP ')+p+'%';
         } else if(isMid){
           const p=pct('drive',pp,code,rush,skill);
-          label=code;pctLine='FEET '+p+'%';
+          label=code;pctLine='DRIVE '+p+'%';
         } else {
           if(fromK){
             const p=pct('lob',pp,code,rush,skill);
@@ -425,13 +426,13 @@ function updateCourtSVG(){
     }
   }
 
-  // Opponent dots (orange)
-  const oy=DOT_Y.opp[op]||117;
-  html+=`<circle cx="90" cy="${oy}" r="8" fill="${op==='K'?'#ff4444':op==='D'?'#ff8042':'#ff8042'}" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
-  html+=`<circle cx="230" cy="${oy}" r="8" fill="${op==='K'?'#ff4444':'#ff8042'}" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
+  // Opponent dots (orange) — outside court (in surround) during serve
+  const oy=serveState?10:DOT_Y.opp[op]||117;
+  html+=`<circle cx="90" cy="${oy}" r="8" fill="#ff8042" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
+  html+=`<circle cx="230" cy="${oy}" r="8" fill="#ff8042" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
 
-  // Player dots (lime)
-  const yy=DOT_Y.you[pp]||323;
+  // Player dots (lime) — outside court (in surround) during serve
+  const yy=serveState?421:DOT_Y.you[pp]||323;
   html+=`<circle cx="90" cy="${yy}" r="8" fill="#c8e63c" stroke="rgba(200,230,60,0.35)" stroke-width="4" pointer-events="none"/>`;
   html+=`<circle cx="230" cy="${yy}" r="8" fill="#c8e63c" stroke="rgba(200,230,60,0.35)" stroke-width="4" pointer-events="none"/>`;
 
