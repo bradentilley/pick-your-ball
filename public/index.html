@@ -64,12 +64,12 @@ html,body{height:100%;background:#2d7a3d;color:var(--text);font-family:'Inter',s
 .rush-badge.comfortable{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.06)}
 
 /* Court */
-#court-wrap{flex-shrink:0;width:100%;position:relative;background:#2d7a3d}
-#court-svg{width:100%;display:block;touch-action:manipulation}
+#court-wrap{flex-shrink:0;width:100%;position:relative;background:#2d7a3d;overflow:hidden}
+#court-svg{width:100%;display:block;touch-action:manipulation;max-height:calc(100dvh - 310px)}
 
 /* Action panel */
 #action-panel{
-  flex:1;overflow-y:auto;
+  flex:1;min-height:200px;overflow-y:auto;
   background:var(--bg);
   padding:14px 16px;
   padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
