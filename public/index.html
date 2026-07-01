@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pick Your Ball</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b1f14;
+  --surface:#122a1c;
+  --card:#193524;
+  --border:rgba(255,255,255,0.08);
+  --accent:#c8e63c;
+  --accent-dark:#9eb52e;
+  --text:#e8f5ea;
+  --muted:#5d8a6a;
+  --success:#4ade80;
+  --danger:#ff6b6b;
+  --warning:#ffd93d;
+}
+html,body{min-height:100dvh;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── SETUP ── */
+#screen-setup{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;color:var(--accent);line-height:1;margin-bottom:6px}
+.logo-sub{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:48px}
+.setup-ball{font-size:64px;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(200,230,60,0.4))}
+.skill-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.skill-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:320px;margin-bottom:32px}
+.skill-btn{padding:14px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.skill-btn .skill-icon{font-size:20px;display:block;margin-bottom:4px}
+.skill-btn.active{border-color:var(--accent);background:rgba(200,230,60,.1);color:var(--accent)}
+.btn-start{width:100%;max-width:320px;padding:20px;background:var(--accent);color:#0b1f14;border:none;border-radius:14px;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;cursor:pointer;transition:all .2s}
+.btn-start:active{transform:scale(.98)}
+
+/* ── GAME ── */
+#screen-game{min-height:100dvh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,16px)}
+
+/* Score header */
+.score-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.score-side{text-align:center;min-width:60px}
+.score-who{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--text)}
+.score-num.lead{color:var(--accent)}
+.score-mid{display:flex;flex-direction:column;align-items:center;gap:2px}
+.score-sep{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)}
+.rally-info{font-size:10px;font-weight:600;color:var(--muted)}
+
+/* Court */
+.court-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px}
+.court-row{display:flex;gap:8px;align-items:center;justify-content:center}
+.court-side{flex:1;display:flex;flex-direction:column;gap:6px}
+.court-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center}
+.court-tiers{display:flex;gap:4px}
+.tier-box{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);background:var(--card);transition:all .3s}
+.tier-box.you-here{border-color:var(--accent);background:rgba(200,230,60,.15);color:var(--accent)}
+.tier-box.opp-here{border-color:var(--danger);background:rgba(255,107,107,.15);color:var(--danger)}
+.net-col{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 2px}
+.net-line{width:2px;height:20px;background:rgba(255,255,255,.5);border-radius:1px}
+.net-txt{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.rush-row{display:flex;justify-content:space-between;margin-top:8px}
+.rush-chip{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+.rush-chip.comfortable{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.08)}
+.rush-chip.stretched{border-color:var(--warning);color:var(--warning);background:rgba(255,217,61,.08)}
+
+/* Content */
+.game-content{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.phase-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;line-height:1}
+.phase-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* Shot grid */
+.shot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.shot-btn{padding:18px 10px;border:1.5px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
+.shot-btn:disabled{opacity:.3;cursor:not-allowed}
+.shot-btn:not(:disabled):active{transform:scale(.97)}
+.shot-icon{font-size:28px;margin-bottom:5px}
+.shot-name{font-size:13px;font-weight:700;letter-spacing:.5px}
+.shot-hint{font-size:10px;color:var(--muted);margin-top:2px}
+.shot-btn:not(:disabled):hover,.shot-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
+
+/* Target grid */
+.target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.target-btn{padding:14px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
+.target-btn:active{transform:scale(.97)}
+.target-code{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent)}
+.target-name{font-size:10px;color:var(--muted);margin-top:1px}
+.target-btn:hover,.target-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
+
+/* Make info & roll */
+.make-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.make-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.make-lbl{font-size:11px;color:var(--muted);font-weight:600}
+.make-val{font-size:13px;font-weight:700}
+.make-val.p{color:var(--success)}
+.make-val.a{color:var(--warning)}
+.make-val.m{color:var(--danger)}
+.dice-wrap{text-align:center;margin:12px 0}
+.dice{display:inline-block;width:80px;height:80px;background:var(--card);border:2px solid var(--border);border-radius:16px;font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:80px;color:var(--text);transition:all .2s}
+.dice.rolling{animation:diceAnim .5s ease-out}
+@keyframes diceAnim{0%{transform:rotate(-15deg) scale(1.1)}30%{transform:rotate(10deg) scale(1.05)}60%{transform:rotate(-5deg)}100%{transform:rotate(0) scale(1)}}
+.roll-btn{width:100%;padding:18px;background:var(--accent);color:#0b1f14;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.roll-btn:active{transform:scale(.98)}
+
+/* Outcome */
+.outcome-card{border-radius:14px;padding:18px;text-align:center;border:2px solid transparent}
+.outcome-card.perfect{background:rgba(74,222,128,.1);border-color:var(--success)}
+.outcome-card.attackable{background:rgba(255,217,61,.1);border-color:var(--warning)}
+.outcome-card.miss{background:rgba(255,107,107,.1);border-color:var(--danger)}
+.outcome-word{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;line-height:1}
+.outcome-card.perfect .outcome-word{color:var(--success)}
+.outcome-card.attackable .outcome-word{color:var(--warning)}
+.outcome-card.miss .outcome-word{color:var(--danger)}
+.outcome-roll{font-size:12px;color:var(--muted);margin-top:4px}
+.outcome-desc{font-size:13px;color:var(--text);margin-top:10px;line-height:1.5}
+
+/* Position update card */
+.pos-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:5px}
+.pos-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.pos-lbl{color:var(--muted)}
+.pos-val{font-weight:700}
+
+/* Continue / action buttons */
+.continue-btn{width:100%;padding:16px;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:4px}
+.continue-btn:hover{border-color:var(--accent);color:var(--accent)}
+.continue-btn:active{transform:scale(.98)}
+.danger-btn{width:100%;padding:18px;background:var(--danger);color:white;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:4px}
+.danger-btn:active{transform:scale(.98)}
+
+/* Alert box */
+.alert-box{border-radius:14px;padding:18px;border:2px solid var(--danger);background:rgba(255,107,107,.08);text-align:center}
+.alert-box.smash{border-color:var(--danger)}
+.alert-box.block{border-color:var(--warning)}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:6px}
+.alert-box.smash .alert-title{color:var(--danger)}
+.alert-box.block .alert-title{color:var(--warning)}
+.alert-sub{font-size:12px;color:var(--muted)}
+
+/* Point screen */
+.point-screen{text-align:center;padding:8px 0}
+.point-emoji{font-size:60px;margin-bottom:4px}
+.point-label{font-family:'Bebas Neue',sans-serif;font-size:50px;letter-spacing:4px;line-height:1;margin-bottom:6px}
+.point-label.you{color:var(--accent)}
+.point-label.opp{color:var(--danger)}
+.point-reason{font-size:12px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+
+/* Serve screen */
+.serve-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.serve-emoji{font-size:40px;margin-bottom:10px}
+.serve-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px}
+.serve-lines{display:flex;flex-direction:column;gap:6px;text-align:left;margin-top:12px}
+.serve-line{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+.serve-dot{color:var(--accent);font-size:10px;margin-top:3px;flex-shrink:0}
+
+/* Rally log */
+.log-wrap{border-top:1px solid var(--border);padding:14px 20px}
+.log-toggle{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:0}
+.log-toggle-arrow{transition:transform .2s}
+.log-entries{display:none;margin-top:10px;display:flex;flex-direction:column;gap:3px}
+.log-entry{font-size:11px;color:var(--muted);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px}
+.log-n{min-width:18px;font-weight:700}
+.log-txt.p{color:var(--success)}
+.log-txt.a{color:var(--warning)}
+.log-txt.m{color:var(--danger)}
+
+/* Opponent thinking */
+.thinking{display:flex;align-items:center;gap:4px;justify-content:center;padding:8px;color:var(--muted);font-size:13px}
+.dot-anim span{opacity:0;animation:blink 1.2s infinite}
+.dot-anim span:nth-child(2){animation-delay:.2s}
+.dot-anim span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* Game over */
+#screen-gameover{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.go-title{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:4px;color:var(--accent);margin-bottom:8px}
+.go-score{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);margin-bottom:8px}
+.go-msg{font-size:14px;color:var(--muted);margin-bottom:32px}
+.go-stats{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:320px;margin-bottom:28px;display:flex;flex-direction:column;gap:8px}
+.go-stat-row{display:flex;justify-content:space-between;font-size:13px}
+.go-stat-lbl{color:var(--muted)}
+.go-stat-val{font-weight:700}
+
+hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="screen-setup">
+  <div class="setup-ball">🎾</div>
+  <div class="logo">PICK YOUR BALL</div>
+  <div class="logo-sub">Pickleball Mental Training</div>
+  <div class="skill-label">Your Skill Level</div>
+  <div class="skill-row">
+    <button class="skill-btn" data-skill="beginner" onclick="setSkill('beginner')">
+      <span class="skill-icon">🌱</span>Beginner
+    </button>
+    <button class="skill-btn active" data-skill="intermediate" onclick="setSkill('intermediate')">
+      <span class="skill-icon">🎯</span>Intermediate
+    </button>
+    <button class="skill-btn" data-skill="advanced" onclick="setSkill('advanced')">
+      <span class="skill-icon">🔥</span>Advanced
+    </button>
+  </div>
+  <button class="btn-start" onclick="startGame()">START GAME</button>
+</div>
+
+<!-- GAME -->
+<div id="screen-game" style="display:none">
+  <!-- Score bar -->
+  <div class="score-bar">
+    <div class="score-side">
+      <div class="score-who">You</div>
+      <div class="score-num" id="score-you">0</div>
+    </div>
+    <div class="score-mid">
+      <div class="score-sep">–</div>
+      <div class="rally-info" id="rally-info">Rally 1</div>
+    </div>
+    <div class="score-side">
+      <div class="score-who">Opponent</div>
+      <div class="score-num" id="score-opp">0</div>
+    </div>
+  </div>
+
+  <!-- Court -->
+  <div class="court-wrap">
+    <div class="court-row">
+      <div class="court-side">
+        <div class="court-label">Opponent</div>
+        <div class="court-tiers">
+          <div class="tier-box" id="opp-D">D</div>
+          <div class="tier-box" id="opp-M">M</div>
+          <div class="tier-box" id="opp-K">K</div>
+        </div>
+      </div>
+      <div class="net-col">
+        <div class="net-line"></div>
+        <div class="net-txt">NET</div>
+        <div class="net-line"></div>
+      </div>
+      <div class="court-side">
+        <div class="court-label">You</div>
+        <div class="court-tiers">
+          <div class="tier-box" id="you-K">K</div>
+          <div class="tier-box" id="you-M">M</div>
+          <div class="tier-box" id="you-D">D</div>
+        </div>
+      </div>
+    </div>
+    <div class="rush-row">
+      <div class="rush-chip" id="rush-opp">Opp: –</div>
+      <div class="rush-chip" id="rush-you">You: –</div>
+    </div>
+  </div>
+
+  <!-- Dynamic content -->
+  <div class="game-content" id="game-content"></div>
+
+  <!-- Rally log -->
+  <div class="log-wrap">
+    <div class="log-toggle" onclick="toggleLog()">
+      <span class="log-toggle-arrow" id="log-arrow">▶</span>
+      RALLY LOG
+    </div>
+    <div class="log-entries" id="log-entries" style="display:none"></div>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div id="screen-gameover" style="display:none">
+  <div class="setup-ball">🏆</div>
+  <div class="go-title" id="go-title">GAME!</div>
+  <div class="go-score" id="go-score"></div>
+  <div class="go-msg" id="go-msg"></div>
+  <div class="go-stats" id="go-stats"></div>
+  <button class="btn-start" onclick="location.reload()">PLAY AGAIN</button>
+</div>
+
+<script>
+// ── MAKE TABLES ─────────────────────────────────────────────────────────────
+// From the ruleset (v7). All pre-computed.
+// Format: { makeNum, perfectMax } where perfectMax is the intermediate (50/50) value.
+const TABLES = {
+  drop:{
+    D:{CK:{c:{m:8,p:4},s:{m:5,p:2}},side:{c:{m:6,p:3},s:{m:4,p:2}}},
+    M:{CK:{c:{m:10,p:5},s:{m:7,p:3}},side:{c:{m:9,p:5},s:{m:7,p:3}}},
+    K:{CK:{c:{m:11,p:6},s:{m:8,p:3}},side:{c:{m:7,p:4},s:{m:5,p:2}}},
+  },
+  drive:{
+    D:{c:{m:8,p:4},s:{m:6,p:2}},
+    M:{c:{m:8,p:4},s:{m:6,p:2}},
+    K:{c:{m:11,p:6},s:{m:8,p:3}}, // smash
+  },
+  lob:{
+    CD:{c:{m:8,p:4},s:{m:6,p:2}},
+    side:{c:{m:7,p:4},s:{m:5,p:2}},
+  },
+  block:{
+    D:{m:6,p:3},
+    M:{m:4,p:2},
+    K:null, // automatic point to smasher
+  }
+};
+
+function getMakeInfo(shot, pos, target, rush, skillLevel) {
+  const r = rush === 'stretched' ? 's' : 'c';
+  let base;
+  if (shot === 'drop') {
+    const tType = target === 'CK' ? 'CK' : 'side';
+    base = TABLES.drop[pos][tType][r];
+  } else if (shot === 'drive') {
+    base = TABLES.drive[pos][r];
+  } else { // lob
+    const tType = target === 'CD' ? 'CD' : 'side';
+    base = TABLES.lob[tType][r];
+  }
+  const splits = {beginner:0.33, intermediate:0.50, advanced:0.67};
+  const split = splits[skillLevel || 'intermediate'];
+  const perfectMax = Math.max(1, Math.round(base.m * split));
+  return {makeNum:base.m, perfectMax, attackableMin:perfectMax+1, attackableMax:base.m};
+}
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+const TIER = {K:0, M:1, D:2};
+function rollD12(){ return Math.floor(Math.random()*12)+1; }
+function resolveRoll(roll, makeNum, perfectMax){
+  if(roll > makeNum) return 'miss';
+  if(roll <= perfectMax) return 'perfect';
+  return 'attackable';
+}
+function getContactPos(target){
+  if(['LK','CK','RK'].includes(target)) return 'K';
+  if(['LM','CM','RM'].includes(target)) return 'M';
+  return 'D';
+}
+function getRush(fromPos, toPos){
+  return Math.abs(TIER[fromPos]-TIER[toPos]) >= 2 ? 'stretched' : 'comfortable';
+}
+function advanceK(pos){ return pos==='D'?'M':pos==='M'?'K':'K'; }
+function tierLabel(pos){ return pos==='K'?'Kitchen':pos==='M'?'Mid':'Deep'; }
+function shotLabel(shot){ return shot==='drive'?'Drive':shot==='drop'?'Drop':'Lob'; }
+
+// Position update after a shot resolves for the HITTER
+// Returns new hitter position; opponent position is handled separately
+function hitterNewPos(shot, outcome, contactPos){
+  if(outcome==='miss') return contactPos;
+  if(outcome==='attackable') return contactPos;
+  // Perfect:
+  if(shot==='drop') return 'K'; // Reset — hitter goes to K
+  if(shot==='drive') return contactPos==='D' ? 'M' : contactPos;
+  if(shot==='lob') return contactPos; // stay, opponent forced to D
+  return contactPos;
+}
+
+// ── OPPONENT AI ─────────────────────────────────────────────────────────────
+function oppChooseShot(oppPos){
+  const r = Math.random();
+  if(oppPos==='K')  return r<.75?'drop':'drive'; // mostly drop to maintain
+  if(oppPos==='M')  return r<.50?'drop':r<.80?'drive':'lob';
+  return r<.55?'drop':r<.82?'drive':'lob'; // from D
+}
+function oppChooseTarget(shot, oppPos, playerPos){
+  if(shot==='drop'){
+    if(playerPos==='K') return 'CK'; // safer at net
+    return Math.random()<.5?'CK':(Math.random()<.5?'LK':'RK');
+  }
+  if(shot==='lob') return Math.random()<.5?'LD':'RD';
+  const t=['LD','CD','RD']; return t[Math.floor(Math.random()*t.length)];
+}
+
+// ── GAME STATE ───────────────────────────────────────────────────────────────
+let G = {};
+let sessionLog = [];
+
+function resetRally(){
+  // Determine server
+  G.playerServing = G.playerServing; // set externally
+  G.playerPos = 'D';
+  G.oppPos = G.playerServing ? 'K' : 'D'; // if player serves: opp advances to K; if opp serves: both start D then opp stays at D
+  // Serve sequence: server D, returner goes to K after return
+  // We auto-handle: after serve, server stays at D, returner at K
+  if(G.playerServing){
+    G.playerPos = 'D';
+    G.oppPos = 'K';
+  } else {
+    G.playerPos = 'K';
+    G.oppPos = 'D';
+  }
+  G.playerRush = 'comfortable';
+  G.oppRush = 'comfortable';
+  G.nextPlayerComfortable = false;
+  G.nextOppComfortable = false;
+  G.rallyShot = 0;
+  G.phase = 'serve';
+  G.pendingAttackable = null; // 'player' or 'opp' – who left an attackable ball
+}
+
+function startGame(){
+  G = {
+    playerScore: 0, oppScore: 0,
+    skillLevel: document.querySelector('.skill-btn.active')?.dataset.skill || 'intermediate',
+    playerServing: true,
+    playerPos: 'D', oppPos: 'K',
+    playerRush: 'comfortable', oppRush: 'comfortable',
+    nextPlayerComfortable: false, nextOppComfortable: false,
+    rallyNum: 1, rallyShot: 0,
+    phase: 'serve',
+    selectedShot: null, selectedTarget: null,
+    lastRoll: null, lastOutcome: null, lastMakeInfo: null,
+    pendingAttackable: null,
+    // current shot data
+    shotActor: 'player',
+    // smash/block state
+    smashRoll: null, smashOutcome: null,
+    blockRoll: null, blockOutcome: null,
+    pointWinner: null, pointReason: '',
+    totalShots: 0, totalPerfect: 0, totalAttackable: 0, totalMiss: 0,
+  };
+  sessionLog = [];
+  document.getElementById('screen-setup').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'flex';
+  render();
+}
+
+function setSkill(s){
+  document.querySelectorAll('.skill-btn').forEach(b=>b.classList.toggle('active',b.dataset.skill===s));
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function render(){
+  updateScoreBar();
+  updateCourt();
+  const c = document.getElementById('game-content');
+  c.innerHTML = '';
+
+  if(G.phase==='serve')        c.innerHTML = renderServe();
+  else if(G.phase==='player-shot')   c.innerHTML = renderPlayerShot();
+  else if(G.phase==='player-target') c.innerHTML = renderPlayerTarget();
+  else if(G.phase==='player-roll')   c.innerHTML = renderPlayerRoll();
+  else if(G.phase==='player-outcome') c.innerHTML = renderPlayerOutcome();
+  else if(G.phase==='opp-turn')      c.innerHTML = renderOppTurn();
+  else if(G.phase==='player-smash')  c.innerHTML = renderPlayerSmash();
+  else if(G.phase==='opp-smash')     c.innerHTML = renderOppSmash();
+  else if(G.phase==='player-block')  c.innerHTML = renderPlayerBlock();
+  else if(G.phase==='opp-block')     c.innerHTML = renderOppBlock();
+  else if(G.phase==='point')         c.innerHTML = renderPoint();
+}
+
+function updateScoreBar(){
+  const py = document.getElementById('score-you');
+  const po = document.getElementById('score-opp');
+  py.textContent = G.playerScore;
+  po.textContent = G.oppScore;
+  py.className = 'score-num'+(G.playerScore>G.oppScore?' lead':'');
+  po.className = 'score-num'+(G.oppScore>G.playerScore?' lead':'');
+  document.getElementById('rally-info').textContent = `Rally ${G.rallyNum} · Shot ${G.rallyShot}`;
+}
+
+function updateCourt(){
+  ['K','M','D'].forEach(t=>{
+    document.getElementById(`you-${t}`).className='tier-box'+(G.playerPos===t?' you-here':'');
+    document.getElementById(`opp-${t}`).className='tier-box'+(G.oppPos===t?' opp-here':'');
+  });
+  const ru = document.getElementById('rush-you');
+  const ro = document.getElementById('rush-opp');
+  const yr = G.playerRush||'comfortable';
+  const or_ = G.oppRush||'comfortable';
+  ru.textContent=`You: ${yr==='stretched'?'Stretched':'Comfortable'}`;
+  ru.className=`rush-chip ${yr}`;
+  ro.textContent=`Opp: ${or_==='stretched'?'Stretched':'Comfortable'}`;
+  ro.className=`rush-chip ${or_}`;
+}
+
+// ── RENDER PHASES ────────────────────────────────────────────────────────────
+
+function renderServe(){
+  const serving = G.playerServing;
+  return `
+  <div class="serve-card">
+    <div class="serve-emoji">${serving?'🏓':'⚡'}</div>
+    <div class="serve-title">${serving?'YOUR SERVE':'OPPONENT SERVES'}</div>
+    <div class="serve-lines">
+      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'You start at Deep (D)':'Opponent starts at Deep (D)'}</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'Opponent returns and advances to Kitchen (K)':'You return and advance to Kitchen (K)'}</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'You stay at Deep — two-bounce rule pins you back':'Opponent stays at Deep — two-bounce rule pins them back'}</div>
+    </div>
+  </div>
+  <button class="continue-btn" onclick="startRally()">BEGIN RALLY →</button>`;
+}
+
+function startRally(){
+  G.phase = 'player-shot';
+  G.rallyShot = 1;
+  render();
+}
+
+function renderPlayerShot(){
+  const fromK = G.playerPos==='K';
+  return `
+  <div>
+    <div class="phase-title">YOUR SHOT</div>
+    <div class="phase-sub">You're at ${tierLabel(G.playerPos)}${G.nextPlayerComfortable?' · <span style="color:var(--success)">✓ Comfortable bonus</span>':''}</div>
+  </div>
+  <div class="shot-grid">
+    <button class="shot-btn" onclick="selectShot('drop')">
+      <div class="shot-icon">🪶</div>
+      <div class="shot-name">DROP</div>
+      <div class="shot-hint">Soft into kitchen</div>
+    </button>
+    <button class="shot-btn" onclick="selectShot('drive')" ${fromK?'disabled title="From Kitchen use Smash"':''}>
+      <div class="shot-icon">💨</div>
+      <div class="shot-name">${fromK?'SMASH':'DRIVE'}</div>
+      <div class="shot-hint">${fromK?'Only from K':'Flat & fast'}</div>
+    </button>
+    <button class="shot-btn" onclick="selectShot('lob')">
+      <div class="shot-icon">🌙</div>
+      <div class="shot-name">LOB</div>
+      <div class="shot-hint">Push them deep</div>
+    </button>
+  </div>
+  ${fromK?`<button class="shot-btn" style="width:100%" onclick="selectShot('drive')">
+    <div class="shot-icon">💥</div>
+    <div class="shot-name">SMASH</div>
+    <div class="shot-hint">You're at the kitchen — put it away!</div>
+  </button>`:''}`;
+}
+
+function selectShot(shot){
+  G.selectedShot = shot;
+  G.phase = 'player-target';
+  render();
+}
+
+function renderPlayerTarget(){
+  const shot = G.selectedShot;
+  let targets;
+  if(shot==='drop') targets=[{code:'LK',name:'Left Kitchen'},{code:'CK',name:'Center Kitchen'},{code:'RK',name:'Right Kitchen'}];
+  else if(shot==='lob') targets=[{code:'LD',name:'Left Deep'},{code:'CD',name:'Center Deep'},{code:'RD',name:'Right Deep'}];
+  else targets=[{code:'LD',name:'Left Deep'},{code:'CD',name:'Center Deep'},{code:'RD',name:'Right Deep'}];
+
+  return `
+  <div>
+    <div class="phase-title">${shot==='drop'?'🪶':shot==='drive'?'💨':'🌙'} TARGET ZONE</div>
+    <div class="phase-sub">${shotLabel(shot)} — pick where it lands</div>
+  </div>
+  <div class="target-grid">
+    ${targets.map(t=>`
+    <button class="target-btn" onclick="selectTarget('${t.code}')">
+      <div class="target-code">${t.code}</div>
+      <div class="target-name">${t.name}</div>
+    </button>`).join('')}
+  </div>
+  <button class="continue-btn" onclick="G.phase='player-shot';render()">← Back</button>`;
+}
+
+function selectTarget(target){
+  G.selectedTarget = target;
+  const contactPos = getContactPos(target);
+  const baseRush = getRush(G.playerPos, contactPos);
+  // next-shot comfortable bonus overrides rush
+  const rush = G.nextPlayerComfortable ? 'comfortable' : baseRush;
+  G.playerRush = rush;
+  G.nextPlayerComfortable = false;
+  G.lastMakeInfo = getMakeInfo(G.selectedShot, G.playerPos, target, rush, G.skillLevel);
+  G.phase = 'player-roll';
+  render();
+}
+
+function renderPlayerRoll(){
+  const mi = G.lastMakeInfo;
+  const roll = G.lastRoll;
+  const rolled = roll !== null;
+  return `
+  <div>
+    <div class="phase-title">${shotLabel(G.selectedShot)} → ${G.selectedTarget}</div>
+    <div class="phase-sub">From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'}</div>
+  </div>
+  <div class="make-card">
+    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
+    <hr class="div">
+    <div class="make-row"><span class="make-lbl">Perfect band</span><span class="make-val p">1 – ${mi.perfectMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable band</span><span class="make-val a">${mi.attackableMin} – ${mi.attackableMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${mi.makeNum+1} – 12</span></div>
+  </div>
+  <div class="dice-wrap">
+    <div class="dice" id="dice-el">${rolled?roll:'?'}</div>
+  </div>
+  ${rolled?'':
+    `<button class="roll-btn" onclick="doPlayerRoll()">ROLL D12</button>`}
+  ${rolled?`<button class="continue-btn" onclick="resolvePlayerOutcome()">SEE RESULT →</button>`:''}`;
+}
+
+function doPlayerRoll(){
+  G.lastRoll = rollD12();
+  G.totalShots++;
+  const d = document.getElementById('dice-el');
+  if(d){ d.classList.add('rolling'); setTimeout(()=>d.classList.remove('rolling'),500); }
+  render();
+}
+
+function resolvePlayerOutcome(){
+  const mi = G.lastMakeInfo;
+  G.lastOutcome = resolveRoll(G.lastRoll, mi.makeNum, mi.perfectMax);
+  if(G.lastOutcome==='perfect') G.totalPerfect++;
+  else if(G.lastOutcome==='attackable') G.totalAttackable++;
+  else G.totalMiss++;
+  G.phase = 'player-outcome';
+  render();
+}
+
+function renderPlayerOutcome(){
+  const shot = G.selectedShot;
+  const target = G.selectedTarget;
+  const outcome = G.lastOutcome;
+  const roll = G.lastRoll;
+  const contactPos = getContactPos(target);
+
+  let desc='', newYouPos='', newOppPos='';
+
+  if(outcome==='miss'){
+    desc='Out or into the net. Point to opponent.';
+    newYouPos = G.playerPos; newOppPos = G.oppPos;
+  } else if(shot==='drive'){
+    // Drive special: receiver doesn't move
+    newOppPos = G.oppPos;
+    if(outcome==='perfect'){
+      newYouPos = contactPos==='D'?'M':contactPos;
+      desc='Perfect drive! Receiver gets only a weak block. You advance and get a Comfortable next shot.';
+      G.nextPlayerComfortable = true;
+    } else {
+      newYouPos = contactPos;
+      desc='Drive lands but receiver blocks it back. Play continues — your next shot.';
+    }
+  } else if(outcome==='perfect'){
+    if(shot==='drop'){
+      newYouPos='K'; newOppPos='K';
+      desc='Perfect drop into the kitchen! RESET — both players advance to the Kitchen line.';
+    } else { // lob
+      newYouPos = contactPos;
+      newOppPos = 'D';
+      desc='Perfect lob! Opponent is pushed all the way back to Deep. You hold your position.';
+    }
+  } else { // attackable
+    newYouPos = contactPos; newOppPos = G.oppPos;
+    if(shot==='drop') desc='Drop lands but sits up a bit — attackable if opponent is at the Kitchen.';
+    else desc='Lob is catchable — opponent can handle it, no damage done.';
+  }
+
+  // Log
+  logShot('You', shot, target, roll, outcome, G.playerPos, newYouPos);
+
+  // Apply positions
+  G.playerPos = newYouPos;
+  if(shot!=='drive') G.oppPos = newOppPos;
+
+  if(outcome==='miss'){
+    G.pointWinner='opp'; G.pointReason=`Your ${shotLabel(shot)} missed.`;
+    G.phase='point'; render(); return '';
+  }
+
+  if(shot==='drive'){
+    // Driver takes the next shot (opponent auto-blocked)
+    G.phase='player-shot'; G.rallyShot++;
+    return renderMiniOutcome(outcome, roll, desc)+
+      `<button class="continue-btn" onclick="G.phase='player-shot';render()">YOUR NEXT SHOT →</button>`;
+  }
+
+  // Check if player left an Attackable and opponent is at K → opponent smashes
+  if(outcome==='attackable' && G.oppPos==='K'){
+    return renderMiniOutcome(outcome, roll, desc)+
+      `<button class="danger-btn" onclick="G.phase='opp-smash';render()">OPPONENT SMASHES ⚡</button>`;
+  }
+
+  // Normal: opponent's turn
+  return renderMiniOutcome(outcome, roll, desc)+
+    `<button class="continue-btn" onclick="startOppTurn()">OPPONENT'S TURN →</button>`;
+}
+
+function renderMiniOutcome(outcome, roll, desc){
+  return `
+  <div class="outcome-card ${outcome}">
+    <div class="outcome-word">${outcome.toUpperCase()}</div>
+    <div class="outcome-roll">Rolled ${roll}</div>
+    <div class="outcome-desc">${desc}</div>
+  </div>`;
+}
+
+function startOppTurn(){
+  G.phase='opp-turn';
+  G.rallyShot++;
+  // Compute opp shot & contact position
+  const oppShot = oppChooseShot(G.oppPos);
+  const oppTarget = oppChooseTarget(oppShot, G.oppPos, G.playerPos);
+  const contactPos = getContactPos(oppTarget);
+  const baseRush = getRush(G.oppPos, contactPos);
+  const rush = G.nextOppComfortable ? 'comfortable' : baseRush;
+  G.nextOppComfortable = false;
+  G.oppRush = rush;
+  G.oppSelectedShot = oppShot;
+  G.oppSelectedTarget = oppTarget;
+  G.oppContactPos = contactPos;
+  G.oppMakeInfo = getMakeInfo(oppShot, G.oppPos, oppTarget, rush, 'intermediate');
+  render();
+}
+
+function renderOppTurn(){
+  return `
+  <div>
+    <div class="phase-title">OPPONENT'S TURN</div>
+    <div class="phase-sub">From ${tierLabel(G.oppPos)} · ${G.oppRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'}</div>
+  </div>
+  <div class="make-card">
+    <div class="make-row"><span class="make-lbl">Shot</span><span class="make-val">${shotLabel(G.oppSelectedShot)} → ${G.oppSelectedTarget}</span></div>
+    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${G.oppMakeInfo.makeNum} of 12</span></div>
+    <hr class="div">
+    <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${G.oppMakeInfo.perfectMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${G.oppMakeInfo.attackableMin}–${G.oppMakeInfo.attackableMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${G.oppMakeInfo.makeNum+1}–12</span></div>
+  </div>
+  <div class="dice-wrap"><div class="dice" id="opp-dice">?</div></div>
+  <button class="roll-btn" onclick="rollOppShot()">ROLL FOR OPPONENT</button>`;
+}
+
+function rollOppShot(){
+  const roll = rollD12();
+  const mi = G.oppMakeInfo;
+  const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
+  const shot = G.oppSelectedShot;
+  const target = G.oppSelectedTarget;
+  const contactPos = G.oppContactPos;
+
+  G.lastRoll = roll;
+  G.lastOutcome = outcome;
+
+  // Animate
+  const d = document.getElementById('opp-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+
+  let desc='', newOppPos='', newYouPos='';
+
+  if(outcome==='miss'){
+    desc='Opponent missed! Point to you.';
+    newOppPos=G.oppPos; newYouPos=G.playerPos;
+  } else if(shot==='drive'){
+    newYouPos=G.playerPos; // player doesn't move on a drive
+    if(outcome==='perfect'){
+      newOppPos=contactPos==='D'?'M':contactPos;
+      desc='Opponent drive is perfect — you can only block. They advance and get a Comfortable next shot.';
+      G.nextOppComfortable=true;
+    } else {
+      newOppPos=contactPos;
+      desc='Drive is blocked back. Opponent continues.';
+    }
+  } else if(outcome==='perfect'){
+    if(shot==='drop'){
+      newOppPos='K'; newYouPos='K';
+      desc='Perfect drop — RESET. Both players advance to the Kitchen line.';
+    } else {
+      newOppPos=contactPos; newYouPos='D';
+      desc='Perfect lob! You\'re pushed all the way back to Deep.';
+    }
+  } else { // attackable
+    newOppPos=contactPos; newYouPos=G.playerPos;
+    desc=shot==='drop'?'Drop sits up — attackable if you\'re at the Kitchen.':'Lob is catchable.';
+  }
+
+  logShot('Opp', shot, target, roll, outcome, G.oppPos, newOppPos);
+
+  G.oppPos = newOppPos;
+  if(shot!=='drive') G.playerPos = newYouPos;
+
+  const c = document.getElementById('game-content');
+
+  // Show result and next action
+  if(outcome==='miss'){
+    G.pointWinner='player'; G.pointReason=`Opponent's ${shotLabel(shot)} missed.`;
+    G.phase='point';
+    setTimeout(()=>render(),600); return;
+  }
+
+  if(shot==='drive'){
+    // opponent takes next shot
+    setTimeout(()=>{ G.phase='opp-turn'; G.rallyShot++; startOppTurn(); },600);
+    return;
+  }
+
+  if(outcome==='attackable' && G.playerPos==='K'){
+    // Player can smash!
+    setTimeout(()=>{ G.phase='player-smash'; render(); },600);
+    return;
+  }
+
+  setTimeout(()=>{ G.phase='player-shot'; G.rallyShot++; render(); },600);
+}
+
+function renderPlayerSmash(){
+  return `
+  <div class="alert-box smash">
+    <div class="alert-title">⚡ SMASH OPPORTUNITY!</div>
+    <div class="alert-sub">Opponent left an Attackable ball and you're at the Kitchen!</div>
+  </div>
+  <div class="make-card">
+    <div class="make-row"><span class="make-lbl">Smash Make #</span><span class="make-val">11 of 12 (92%)</span></div>
+    <hr class="div">
+    <div class="make-row"><span class="make-lbl">Perfect (put-away)</span><span class="make-val p">1 – 6</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable (survived)</span><span class="make-val a">7 – 11</span></div>
+    <div class="make-row"><span class="make-lbl">Whiff (12)</span><span class="make-val m">12</span></div>
+  </div>
+  <div class="dice-wrap"><div class="dice" id="smash-dice">?</div></div>
+  <button class="roll-btn" onclick="rollPlayerSmash()">SMASH!</button>`;
+}
+
+function rollPlayerSmash(){
+  const roll = rollD12();
+  const makeNum=11, perfectMax=6;
+  const outcome = roll===12?'miss':resolveRoll(roll, makeNum, perfectMax);
+  G.smashRoll=roll; G.smashOutcome=outcome;
+  const d=document.getElementById('smash-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  logShot('You','smash','—',roll,outcome,G.playerPos,G.playerPos);
+
+  if(outcome==='perfect'){
+    G.pointWinner='player'; G.pointReason='Clean smash put-away! Point to you.';
+    setTimeout(()=>{G.phase='point';render();},600); return;
+  }
+  if(roll===12){
+    G.pointWinner='opp'; G.pointReason='Smash whiff (rolled 12). Point back to opponent.';
+    setTimeout(()=>{G.phase='point';render();},600); return;
+  }
+  // Attackable smash — opponent gets a Defensive Block
+  setTimeout(()=>{ G.phase='opp-block'; render(); },600);
+}
+
+function renderOppSmash(){
+  const mi = TABLES.drive['K']['c'];
+  const roll = rollD12();
+  const outcome = roll===12?'miss':resolveRoll(roll, mi.m, mi.p);
+  G.smashRoll=roll; G.smashOutcome=outcome;
+  logShot('Opp','smash','—',roll,outcome,G.oppPos,G.oppPos);
+
+  if(outcome==='perfect'){
+    G.pointWinner='opp'; G.pointReason='Opponent clean smash put-away! Point to opponent.';
+    return `
+    <div class="outcome-card miss">
+      <div class="outcome-word">SMASHED!</div>
+      <div class="outcome-roll">Rolled ${roll}</div>
+      <div class="outcome-desc">Clean put-away — point to opponent.</div>
+    </div>
+    <button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;
+  }
+  if(roll===12){
+    G.pointWinner='player'; G.pointReason='Opponent whiffed the smash! Point to you.';
+    return `
+    <div class="outcome-card perfect">
+      <div class="outcome-word">WHIFF!</div>
+      <div class="outcome-roll">Rolled 12</div>
+      <div class="outcome-desc">Opponent whiffed the smash. Point to you!</div>
+    </div>
+    <button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;
+  }
+  // Attackable smash — player gets Defensive Block
+  return `
+  <div class="outcome-card attackable">
+    <div class="outcome-word">HARD SMASH!</div>
+    <div class="outcome-roll">Rolled ${roll}</div>
+    <div class="outcome-desc">Opponent's smash is hard but not clean. You get a block attempt!</div>
+  </div>
+  <button class="danger-btn" onclick="G.phase='player-block';render()">ATTEMPT BLOCK →</button>`;
+}
+
+function renderPlayerBlock(){
+  const defPos = G.playerPos;
+  const blockData = TABLES.block[defPos];
+  if(!blockData){
+    // At K = automatic point to smasher
+    G.pointWinner='opp'; G.pointReason='No block from Kitchen — too close to react. Point to opponent.';
+    G.phase='point'; render(); return '';
+  }
+  return `
+  <div class="alert-box block">
+    <div class="alert-title">🛡️ BLOCK ATTEMPT</div>
+    <div class="alert-sub">You're at ${tierLabel(defPos)} — dig it out!</div>
+  </div>
+  <div class="make-card">
+    <div class="make-row"><span class="make-lbl">Block Make #</span><span class="make-val">${blockData.m} of 12 (${Math.round(blockData.m/12*100)}%)</span></div>
+    <hr class="div">
+    <div class="make-row"><span class="make-lbl">Perfect (clean dig)</span><span class="make-val p">1 – ${blockData.p}</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable (weak dig)</span><span class="make-val a">${blockData.p+1} – ${blockData.m}</span></div>
+    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${blockData.m+1} – 12</span></div>
+  </div>
+  <div class="dice-wrap"><div class="dice" id="block-dice">?</div></div>
+  <button class="roll-btn" onclick="rollPlayerBlock()" style="background:var(--warning);color:#0b1f14">BLOCK!</button>`;
+}
+
+function rollPlayerBlock(){
+  const defPos=G.playerPos;
+  const blockData=TABLES.block[defPos];
+  if(!blockData){ G.pointWinner='opp'; G.pointReason='No block from Kitchen.'; G.phase='point'; render(); return; }
+  const roll=rollD12();
+  const outcome=resolveRoll(roll, blockData.m, blockData.p);
+  G.blockRoll=roll; G.blockOutcome=outcome;
+  const d=document.getElementById('block-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  logShot('You','block','—',roll,outcome,defPos,defPos);
+
+  if(outcome==='miss'){
+    G.pointWinner='opp'; G.pointReason='Block missed — couldn\'t get a paddle on it. Point to opponent.';
+    setTimeout(()=>{G.phase='point';render();},600); return;
+  }
+  if(outcome==='perfect'){
+    // Reset — both to K, smasher can't re-attack
+    G.playerPos='K'; G.oppPos='K';
+    G.pointReason='';
+    setTimeout(()=>{
+      const c=document.getElementById('game-content');
+      c.innerHTML=`
+      <div class="outcome-card perfect">
+        <div class="outcome-word">CLEAN BLOCK!</div>
+        <div class="outcome-roll">Rolled ${roll}</div>
+        <div class="outcome-desc">Perfect dig — RESET. Both players go to the Kitchen line. Rally continues!</div>
+      </div>
+      <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">CONTINUE RALLY →</button>`;
+    },600); return;
+  }
+  // Attackable block — smasher (opp at K) gets another smash
+  if(G.oppPos==='K'){
+    setTimeout(()=>{ G.phase='opp-smash'; render(); },600); return;
+  }
+  // Opp not at K — rally continues
+  setTimeout(()=>{ G.phase='player-shot'; G.rallyShot++; render(); },600);
+}
+
+function renderOppBlock(){
+  // Opponent attempts block after an Attackable smash from player
+  const defPos = G.oppPos;
+  const blockData = TABLES.block[defPos];
+  if(!blockData){
+    G.pointWinner='player'; G.pointReason='No block from Kitchen for opponent. Point to you!';
+    G.phase='point'; render(); return '';
+  }
+  const roll=rollD12();
+  const outcome=resolveRoll(roll, blockData.m, blockData.p);
+  G.blockRoll=roll; G.blockOutcome=outcome;
+  logShot('Opp','block','—',roll,outcome,defPos,defPos);
+
+  if(outcome==='miss'){
+    G.pointWinner='player'; G.pointReason='Opponent couldn\'t get a paddle on it. Point to you!';
+    return `
+    <div class="outcome-card perfect"><div class="outcome-word">WINNER!</div>
+    <div class="outcome-roll">Opp rolled ${roll}</div>
+    <div class="outcome-desc">Opponent missed the block!</div></div>
+    <button class="continue-btn" onclick="G.phase='point';render()">COLLECT THE POINT</button>`;
+  }
+  if(outcome==='perfect'){
+    G.playerPos='K'; G.oppPos='K';
+    return `
+    <div class="outcome-card attackable"><div class="outcome-word">CLEAN BLOCK</div>
+    <div class="outcome-roll">Opp rolled ${roll}</div>
+    <div class="outcome-desc">Opponent digs it out perfectly — RESET. Both to Kitchen. Rally continues.</div></div>
+    <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">CONTINUE →</button>`;
+  }
+  // Attackable block — player at K gets another smash
+  if(G.playerPos==='K'){
+    return `
+    <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
+    <div class="outcome-roll">Opp rolled ${roll}</div>
+    <div class="outcome-desc">Opponent's block is weak and still attackable. SMASH AGAIN!</div></div>
+    <button class="danger-btn" onclick="G.phase='player-smash';render()">SMASH AGAIN! ⚡</button>`;
+  }
+  return `
+  <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
+  <div class="outcome-roll">Opp rolled ${roll}</div>
+  <div class="outcome-desc">Weak dig but you're not at the net. Rally continues.</div></div>
+  <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">YOUR SHOT →</button>`;
+}
+
+function renderPoint(){
+  const won = G.pointWinner==='player';
+  if(won){ G.playerScore++; } else { G.oppScore++; }
+  // Next server = point winner
+  G.playerServing = won;
+  G.rallyNum++;
+
+  // Check game over (first to 11, win by 2)
+  const gameOver = (G.playerScore>=11||G.oppScore>=11) &&
+    Math.abs(G.playerScore-G.oppScore)>=2;
+
+  if(gameOver){ setTimeout(()=>showGameOver(),1200); }
+
+  return `
+  <div class="point-screen">
+    <div class="point-emoji">${won?'🎉':'😤'}</div>
+    <div class="point-label ${won?'you':'opp'}">${won?'YOUR POINT!':'THEIR POINT'}</div>
+    <div class="point-reason">${G.pointReason}</div>
+  </div>
+  <div class="make-card" style="margin-bottom:8px">
+    <div class="make-row"><span class="make-lbl">Score</span><span class="make-val">${G.playerScore} – ${G.oppScore}</span></div>
+    <div class="make-row"><span class="make-lbl">Next serve</span><span class="make-val">${won?'You':'Opponent'}</span></div>
+  </div>
+  ${!gameOver?`<button class="continue-btn" onclick="nextRally()">NEXT RALLY →</button>`:'<div style="text-align:center;color:var(--muted);font-size:13px">Finishing game...</div>'}`;
+}
+
+function nextRally(){
+  // Reset positions for new rally (serve sequence)
+  if(G.playerServing){
+    G.playerPos='D'; G.oppPos='K';
+  } else {
+    G.playerPos='K'; G.oppPos='D';
+  }
+  G.playerRush='comfortable'; G.oppRush='comfortable';
+  G.nextPlayerComfortable=false; G.nextOppComfortable=false;
+  G.rallyShot=0;
+  G.phase='serve';
+  render();
+}
+
+function showGameOver(){
+  document.getElementById('screen-game').style.display='none';
+  document.getElementById('screen-gameover').style.display='flex';
+  const won = G.playerScore>G.oppScore;
+  document.getElementById('go-title').textContent = won?'YOU WIN!':'GOOD EFFORT';
+  document.getElementById('go-score').textContent = `${G.playerScore} – ${G.oppScore}`;
+  document.getElementById('go-msg').textContent = won
+    ? `Winner! You took it ${G.playerScore}–${G.oppScore}.`
+    : `Opponent wins ${G.oppScore}–${G.playerScore}. Keep training!`;
+  const pct = G.totalShots>0?Math.round(G.totalPerfect/G.totalShots*100):0;
+  const aPct = G.totalShots>0?Math.round(G.totalAttackable/G.totalShots*100):0;
+  document.getElementById('go-stats').innerHTML=`
+  <div class="go-stat-row"><span class="go-stat-lbl">Total shots</span><span class="go-stat-val">${G.totalShots}</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--success)">Perfect</span><span class="go-stat-val" style="color:var(--success)">${G.totalPerfect} (${pct}%)</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--warning)">Attackable</span><span class="go-stat-val" style="color:var(--warning)">${G.totalAttackable} (${aPct}%)</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--danger)">Miss</span><span class="go-stat-val" style="color:var(--danger)">${G.totalMiss}</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl">Rallies played</span><span class="go-stat-val">${G.rallyNum-1}</span></div>`;
+}
+
+// ── LOG ───────────────────────────────────────────────────────────────────────
+function logShot(who, shot, target, roll, outcome, fromPos, toPos){
+  sessionLog.push({who,shot,target,roll,outcome,fromPos,toPos,rallyNum:G.rallyNum,shotNum:G.rallyShot});
+  renderLog();
+}
+
+function renderLog(){
+  const el=document.getElementById('log-entries');
+  if(!el) return;
+  el.innerHTML=sessionLog.slice().reverse().slice(0,30).map((e,i)=>`
+  <div class="log-entry ${e.outcome}">
+    <span class="log-n">${sessionLog.length-i}</span>
+    <span class="log-txt ${e.outcome[0]}">${e.who} · R${e.rallyNum}·S${e.shotNum} · ${shotLabel(e.shot)}→${e.target} · Roll ${e.roll} → <strong>${e.outcome.toUpperCase()}</strong> (${e.fromPos}→${e.toPos})</span>
+  </div>`).join('');
+}
+
+let logOpen=false;
+function toggleLog(){
+  logOpen=!logOpen;
+  const el=document.getElementById('log-entries');
+  if(el) el.style.display=logOpen?'flex':'none';
+  const arr=document.getElementById('log-arrow');
+  if(arr) arr.textContent=logOpen?'▼':'▶';
+  if(logOpen) renderLog();
+}
+</script>
+</body>
+</html>
