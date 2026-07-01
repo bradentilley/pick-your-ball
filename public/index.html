@@ -854,7 +854,7 @@ function renderPlayerRoll(){
   <div class="dice-wrap"><div class="dice" id="dice-el">${rolled?roll:'?'}</div></div>
   ${rolled ? '' : `<button class="roll-btn" onclick="doPlayerRoll()">ROLL D12</button>`}
   ${rolled ? `<button class="continue-btn" onclick="resolvePlayerOutcome()">SEE RESULT →</button>` : ''}
-  <button class="continue-btn" onclick="G.selectedZone=null;${G.selectedShot==='drive'||G.selectedShot==='lob'?`G.phase='player-shot-for-zone'`:`G.phase='player-zone'`};render()">← Change Shot</button>`;
+  <button class="continue-btn" onclick="G.selectedZone=null;${['LD','CD','RD'].includes(G.selectedTarget)?`G.phase='player-shot-for-zone'`:`G.phase='player-zone'`};render()">← Change Shot</button>`;
 }
 
 function doPlayerRoll(){
