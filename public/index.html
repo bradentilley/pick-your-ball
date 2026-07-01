@@ -19,6 +19,7 @@
   --success:#4ade80;
   --danger:#ff6b6b;
   --warning:#ffd93d;
+  --opp:#ff8042;
 }
 html,body{min-height:100dvh;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
@@ -48,45 +49,63 @@ html,body{min-height:100dvh;background:var(--bg);color:var(--text);font-family:'
 .score-sep{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)}
 .rally-info{font-size:10px;font-weight:600;color:var(--muted)}
 
-/* Court */
-.court-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px}
+/* Compact court strip (always visible at top) */
+.court-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px}
 .court-row{display:flex;gap:8px;align-items:center;justify-content:center}
-.court-side{flex:1;display:flex;flex-direction:column;gap:6px}
+.court-side{flex:1;display:flex;flex-direction:column;gap:5px}
 .court-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center}
 .court-tiers{display:flex;gap:4px}
-.tier-box{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);background:var(--card);transition:all .3s}
+.tier-box{flex:1;padding:6px 4px;border:1.5px solid var(--border);border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);background:var(--card);transition:all .3s}
 .tier-box.you-here{border-color:var(--accent);background:rgba(200,230,60,.15);color:var(--accent)}
-.tier-box.opp-here{border-color:var(--danger);background:rgba(255,107,107,.15);color:var(--danger)}
+.tier-box.opp-here{border-color:var(--opp);background:rgba(255,128,66,.15);color:var(--opp)}
 .net-col{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 2px}
-.net-line{width:2px;height:20px;background:rgba(255,255,255,.5);border-radius:1px}
+.net-line{width:2px;height:18px;background:rgba(255,255,255,.5);border-radius:1px}
 .net-txt{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.rush-row{display:flex;justify-content:space-between;margin-top:8px}
+.rush-row{display:flex;justify-content:space-between;margin-top:7px}
 .rush-chip{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
 .rush-chip.comfortable{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.08)}
 .rush-chip.stretched{border-color:var(--warning);color:var(--warning);background:rgba(255,217,61,.08)}
 
 /* Content */
-.game-content{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.game-content{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
 .phase-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;line-height:1}
 .phase-sub{font-size:12px;color:var(--muted);margin-top:3px}
 
-/* Shot grid */
-.shot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+/* ── INTERACTIVE COURT PICKER ── */
+.cp-wrap{border-radius:12px;overflow:hidden;border:1.5px solid var(--border);background:var(--card);user-select:none}
+.cp-col-hdr{display:grid;grid-template-columns:38px repeat(3,1fr);gap:2px;padding:5px 5px 0;background:var(--surface)}
+.cp-col-lbl{text-align:center;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding-bottom:2px}
+.cp-opp-side{display:grid;grid-template-columns:38px repeat(3,1fr);gap:2px;padding:2px 5px 0;background:var(--surface)}
+.cp-you-side{display:grid;grid-template-columns:38px 1fr;gap:2px;padding:0 5px 5px;background:var(--surface)}
+.cp-rlabel{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding-right:5px;gap:3px;min-height:56px}
+.cp-rlabel-ref{min-height:28px}
+.cp-rlabel-text{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);line-height:1}
+.cp-dots-mini{display:flex;gap:3px;justify-content:flex-end}
+.cp-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
+.cp-dot.you{background:var(--accent);box-shadow:0 0 5px rgba(200,230,60,.7)}
+.cp-dot.opp{background:var(--opp);box-shadow:0 0 5px rgba(255,128,66,.7)}
+.cp-zone{padding:6px 3px;border:1.5px solid var(--border);border-radius:7px;text-align:center;background:var(--bg);min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .15s;position:relative;margin-bottom:2px}
+.cp-zone.clickable{cursor:pointer}
+.cp-zone.clickable:active{transform:scale(.96)}
+.cp-zone.grayed{opacity:0.25;cursor:default}
+.cp-zone.sel,.cp-zone.clickable:hover{border-color:var(--accent);background:rgba(200,230,60,.1)}
+.cp-zone-code{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--text);line-height:1}
+.cp-zone-pct{font-size:9px;font-weight:700;color:var(--muted);margin-top:3px;line-height:1.35;white-space:pre-line}
+.cp-net-wrap{padding:0 5px;background:var(--surface)}
+.cp-net{background:rgba(255,255,255,.07);border-top:2px solid rgba(255,255,255,.22);border-bottom:2px solid rgba(255,255,255,.22);padding:4px;text-align:center;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin:2px 0}
+.cp-ref-row{display:grid;grid-template-columns:38px 1fr;gap:2px;padding:0 5px;background:var(--surface)}
+.cp-ref-track{border:1px solid rgba(255,255,255,.06);border-radius:6px;background:var(--bg);height:26px;display:flex;align-items:center;padding:0 10px;justify-content:space-between;margin-bottom:2px}
+.cp-ref-track.you-here{border-color:rgba(200,230,60,.3);background:rgba(200,230,60,.05)}
+.cp-ref-rlabel{display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);height:26px;margin-bottom:2px}
+
+/* Shot choice panel (drive vs lob) */
+.shot-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .shot-btn{padding:18px 10px;border:1.5px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
-.shot-btn:disabled{opacity:.3;cursor:not-allowed}
-.shot-btn:not(:disabled):active{transform:scale(.97)}
+.shot-btn:active{transform:scale(.97)}
 .shot-icon{font-size:28px;margin-bottom:5px}
 .shot-name{font-size:13px;font-weight:700;letter-spacing:.5px}
 .shot-hint{font-size:10px;color:var(--muted);margin-top:2px}
-.shot-btn:not(:disabled):hover,.shot-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
-
-/* Target grid */
-.target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.target-btn{padding:14px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
-.target-btn:active{transform:scale(.97)}
-.target-code{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent)}
-.target-name{font-size:10px;color:var(--muted);margin-top:1px}
-.target-btn:hover,.target-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
+.shot-btn:hover,.shot-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
 
 /* Make info & roll */
 .make-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
@@ -224,7 +243,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
     </div>
   </div>
 
-  <!-- Court -->
+  <!-- Compact court position strip -->
   <div class="court-wrap">
     <div class="court-row">
       <div class="court-side">
@@ -280,8 +299,6 @@ hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
 
 <script>
 // ── MAKE TABLES ─────────────────────────────────────────────────────────────
-// From the ruleset (v7). All pre-computed.
-// Format: { makeNum, perfectMax } where perfectMax is the intermediate (50/50) value.
 const TABLES = {
   drop:{
     D:{CK:{c:{m:8,p:4},s:{m:5,p:2}},side:{c:{m:6,p:3},s:{m:4,p:2}}},
@@ -291,7 +308,7 @@ const TABLES = {
   drive:{
     D:{c:{m:8,p:4},s:{m:6,p:2}},
     M:{c:{m:8,p:4},s:{m:6,p:2}},
-    K:{c:{m:11,p:6},s:{m:8,p:3}}, // smash
+    K:{c:{m:11,p:6},s:{m:8,p:3}},
   },
   lob:{
     CD:{c:{m:8,p:4},s:{m:6,p:2}},
@@ -300,7 +317,7 @@ const TABLES = {
   block:{
     D:{m:6,p:3},
     M:{m:4,p:2},
-    K:null, // automatic point to smasher
+    K:null,
   }
 };
 
@@ -312,7 +329,7 @@ function getMakeInfo(shot, pos, target, rush, skillLevel) {
     base = TABLES.drop[pos][tType][r];
   } else if (shot === 'drive') {
     base = TABLES.drive[pos][r];
-  } else { // lob
+  } else {
     const tType = target === 'CD' ? 'CD' : 'side';
     base = TABLES.lob[tType][r];
   }
@@ -338,32 +355,28 @@ function getContactPos(target){
 function getRush(fromPos, toPos){
   return Math.abs(TIER[fromPos]-TIER[toPos]) >= 2 ? 'stretched' : 'comfortable';
 }
-function advanceK(pos){ return pos==='D'?'M':pos==='M'?'K':'K'; }
 function tierLabel(pos){ return pos==='K'?'Kitchen':pos==='M'?'Mid':'Deep'; }
-function shotLabel(shot){ return shot==='drive'?'Drive':shot==='drop'?'Drop':'Lob'; }
+function shotLabel(shot){ return shot==='drive'?'Drive':shot==='drop'?'Drop':shot==='dink'?'Dink':'Lob'; }
 
-// Position update after a shot resolves for the HITTER
-// Returns new hitter position; opponent position is handled separately
 function hitterNewPos(shot, outcome, contactPos){
   if(outcome==='miss') return contactPos;
   if(outcome==='attackable') return contactPos;
-  // Perfect:
-  if(shot==='drop') return 'K'; // Reset — hitter goes to K
+  if(shot==='drop'||shot==='dink') return 'K';
   if(shot==='drive') return contactPos==='D' ? 'M' : contactPos;
-  if(shot==='lob') return contactPos; // stay, opponent forced to D
+  if(shot==='lob') return contactPos;
   return contactPos;
 }
 
 // ── OPPONENT AI ─────────────────────────────────────────────────────────────
 function oppChooseShot(oppPos){
   const r = Math.random();
-  if(oppPos==='K')  return r<.75?'drop':'drive'; // mostly drop to maintain
+  if(oppPos==='K')  return r<.75?'drop':'drive';
   if(oppPos==='M')  return r<.50?'drop':r<.80?'drive':'lob';
-  return r<.55?'drop':r<.82?'drive':'lob'; // from D
+  return r<.55?'drop':r<.82?'drive':'lob';
 }
 function oppChooseTarget(shot, oppPos, playerPos){
   if(shot==='drop'){
-    if(playerPos==='K') return 'CK'; // safer at net
+    if(playerPos==='K') return 'CK';
     return Math.random()<.5?'CK':(Math.random()<.5?'LK':'RK');
   }
   if(shot==='lob') return Math.random()<.5?'LD':'RD';
@@ -373,25 +386,6 @@ function oppChooseTarget(shot, oppPos, playerPos){
 // ── GAME STATE ───────────────────────────────────────────────────────────────
 let G = {};
 let sessionLog = [];
-
-function resetRally(){
-  // Determine server
-  G.playerServing = G.playerServing; // set externally
-  G.playerPos = 'D';
-  G.oppPos = G.playerServing ? 'K' : 'D'; // if player serves: opp advances to K; if opp serves: both start D then opp stays at D
-  // Serve sequence: server D, returner goes to K after return
-  // We auto-handle: after serve, server stays at D, returner at K
-  // Both start at D on serve — returner advances to K after return (handled in startRally)
-  G.playerPos = 'D';
-  G.oppPos = 'D';
-  G.playerRush = 'comfortable';
-  G.oppRush = 'comfortable';
-  G.nextPlayerComfortable = false;
-  G.nextOppComfortable = false;
-  G.rallyShot = 0;
-  G.phase = 'serve';
-  G.pendingAttackable = null; // 'player' or 'opp' – who left an attackable ball
-}
 
 function startGame(){
   G = {
@@ -404,16 +398,15 @@ function startGame(){
     nextPlayerComfortable: false, nextOppComfortable: false,
     rallyNum: 1, rallyShot: 0,
     phase: 'serve',
-    selectedShot: null, selectedTarget: null,
+    selectedShot: null, selectedTarget: null, selectedZone: null,
     lastRoll: null, lastOutcome: null, lastMakeInfo: null,
     pendingAttackable: null,
-    // current shot data
     shotActor: 'player',
-    // smash/block state
     smashRoll: null, smashOutcome: null,
     blockRoll: null, blockOutcome: null,
     pointWinner: null, pointReason: '',
     totalShots: 0, totalPerfect: 0, totalAttackable: 0, totalMiss: 0,
+    _serveReturn: false,
   };
   sessionLog = [];
   document.getElementById('screen-setup').style.display = 'none';
@@ -432,20 +425,20 @@ function render(){
   const c = document.getElementById('game-content');
   c.innerHTML = '';
 
-  if(G.phase==='serve')               c.innerHTML = renderServe();
+  if(G.phase==='serve')                    c.innerHTML = renderServe();
   else if(G.phase==='opp-serve-return')    c.innerHTML = renderOppServeReturn();
-  else if(G.phase==='player-serve-return') c.innerHTML = renderPlayerServeReturn();
+  else if(G.phase==='player-serve-return') { G._serveReturn=true; c.innerHTML = renderCourtPicker(); }
   else if(G.phase==='player-serve-return-roll') c.innerHTML = renderPlayerServeReturnRoll();
-  else if(G.phase==='player-shot')    c.innerHTML = renderPlayerShot();
-  else if(G.phase==='player-target')  c.innerHTML = renderPlayerTarget();
-  else if(G.phase==='player-roll')    c.innerHTML = renderPlayerRoll();
-  else if(G.phase==='player-outcome') c.innerHTML = renderPlayerOutcome();
-  else if(G.phase==='opp-turn')       c.innerHTML = renderOppTurn();
-  else if(G.phase==='player-smash')   c.innerHTML = renderPlayerSmash();
-  else if(G.phase==='opp-smash')      c.innerHTML = renderOppSmash();
-  else if(G.phase==='player-block')   c.innerHTML = renderPlayerBlock();
-  else if(G.phase==='opp-block')      c.innerHTML = renderOppBlock();
-  else if(G.phase==='point')          c.innerHTML = renderPoint();
+  else if(G.phase==='player-zone')         c.innerHTML = renderCourtPicker();
+  else if(G.phase==='player-shot-for-zone') c.innerHTML = renderPlayerShotForZone();
+  else if(G.phase==='player-roll')         c.innerHTML = renderPlayerRoll();
+  else if(G.phase==='player-outcome')      c.innerHTML = renderPlayerOutcome();
+  else if(G.phase==='opp-turn')            c.innerHTML = renderOppTurn();
+  else if(G.phase==='player-smash')        c.innerHTML = renderPlayerSmash();
+  else if(G.phase==='opp-smash')           c.innerHTML = renderOppSmash();
+  else if(G.phase==='player-block')        c.innerHTML = renderPlayerBlock();
+  else if(G.phase==='opp-block')           c.innerHTML = renderOppBlock();
+  else if(G.phase==='point')               c.innerHTML = renderPoint();
 }
 
 function updateScoreBar(){
@@ -473,11 +466,198 @@ function updateCourt(){
   ro.className=`rush-chip ${or_}`;
 }
 
+// ── INTERACTIVE COURT PICKER ──────────────────────────────────────────────────
+
+function courtPickerHTML(){
+  const pp = G.playerPos, op = G.oppPos;
+  const rush = G.playerRush;
+  const skill = G.skillLevel;
+  const fromK = pp === 'K';
+  // Mid zones only available when opp is at M and player isn't at K (can't drive from K)
+  const midActive = op === 'M' && !fromK;
+  const dropLabel = fromK ? 'DINK' : 'DROP';
+
+  function pct(shot, target){
+    return Math.round(getMakeInfo(shot, pp, target, rush, skill).makeNum / 12 * 100);
+  }
+
+  function zoneCell(code, rowType){
+    const isSel = G.selectedZone === code;
+    let pctText = '', clickable = false;
+
+    if(rowType === 'kit'){
+      pctText = `${dropLabel}\n${pct('drop', code)}%`;
+      clickable = true;
+    } else if(rowType === 'deep'){
+      if(fromK){
+        // From kitchen, only lob to deep (smash is attack-mode only)
+        pctText = `LOB\n${pct('lob', code)}%`;
+      } else {
+        pctText = `D:${pct('drive', code)}%\nL:${pct('lob', code)}%`;
+      }
+      clickable = true;
+    } else { // mid
+      if(midActive){
+        pctText = `FEET\n${pct('drive', code)}%`;
+        clickable = true;
+      } else {
+        pctText = '—';
+      }
+    }
+
+    const cls = `cp-zone${clickable?' clickable':'  grayed'}${isSel?' sel':''}`;
+    const onclick = clickable ? `onclick="tapZone('${code}')"` : '';
+    return `<div class="${cls}" ${onclick}>
+      <div class="cp-zone-code">${code}</div>
+      <div class="cp-zone-pct">${pctText}</div>
+    </div>`;
+  }
+
+  function rlabel(text, team, tierPos){
+    const pos = team === 'opp' ? op : pp;
+    const hasDots = pos === tierPos;
+    const dotCls = team === 'opp' ? 'opp' : 'you';
+    return `<div class="cp-rlabel">
+      <span class="cp-rlabel-text">${text}</span>
+      ${hasDots ? `<div class="cp-dots-mini"><span class="cp-dot ${dotCls}"></span><span class="cp-dot ${dotCls}"></span></div>` : ''}
+    </div>`;
+  }
+
+  function refRow(tierLabel, tierPos){
+    const active = pp === tierPos;
+    return `
+    <div class="cp-ref-row">
+      <div class="cp-ref-rlabel">${tierLabel}</div>
+      <div class="cp-ref-track${active?' you-here':''}">
+        ${active ? `<span class="cp-dot you"></span><span class="cp-dot you"></span>` : ''}
+      </div>
+    </div>`;
+  }
+
+  return `<div class="cp-wrap">
+    <!-- Column labels -->
+    <div class="cp-col-hdr">
+      <div></div>
+      <div class="cp-col-lbl">Left</div>
+      <div class="cp-col-lbl">Center</div>
+      <div class="cp-col-lbl">Right</div>
+    </div>
+    <!-- Opponent side (tappable) -->
+    <div class="cp-opp-side">
+      ${rlabel('Deep','opp','D')}
+      ${zoneCell('LD','deep')}${zoneCell('CD','deep')}${zoneCell('RD','deep')}
+      ${rlabel('Mid','opp','M')}
+      ${zoneCell('LM','mid')}${zoneCell('CM','mid')}${zoneCell('RM','mid')}
+      ${rlabel('Kit','opp','K')}
+      ${zoneCell('LK','kit')}${zoneCell('CK','kit')}${zoneCell('RK','kit')}
+    </div>
+    <!-- Net -->
+    <div class="cp-net-wrap"><div class="cp-net">NET</div></div>
+    <!-- Your side (reference — dots show your position) -->
+    ${refRow('K','K')}
+    ${refRow('M','M')}
+    ${refRow('D','D')}
+  </div>`;
+}
+
+function renderCourtPicker(){
+  const isSR = G._serveReturn;
+  const title = isSR ? 'RETURN THE SERVE' : 'YOUR SHOT';
+  const sub = isSR
+    ? 'At Deep · Tap the court where you want to place it'
+    : `From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'} · Tap a zone to aim`;
+  return `
+  <div>
+    <div class="phase-title">${title}</div>
+    <div class="phase-sub">${sub}</div>
+  </div>
+  ${courtPickerHTML()}`;
+}
+
+function renderPlayerShotForZone(){
+  const zone = G.selectedTarget;
+  const rush = G.playerRush;
+  const driveMi = getMakeInfo('drive', G.playerPos, zone, rush, G.skillLevel);
+  const lobMi   = getMakeInfo('lob',   G.playerPos, zone, rush, G.skillLevel);
+  const dp = Math.round(driveMi.makeNum/12*100);
+  const lp = Math.round(lobMi.makeNum/12*100);
+  return `
+  <div>
+    <div class="phase-title">→ ${zone}</div>
+    <div class="phase-sub">How do you get it there?</div>
+  </div>
+  ${courtPickerHTML()}
+  <div class="shot-choice-grid" style="margin-top:10px">
+    <button class="shot-btn" onclick="selectShotForZone('drive')">
+      <div class="shot-icon">💨</div>
+      <div class="shot-name">DRIVE</div>
+      <div class="shot-hint">${dp}% make · Flat & fast</div>
+    </button>
+    <button class="shot-btn" onclick="selectShotForZone('lob')">
+      <div class="shot-icon">🌙</div>
+      <div class="shot-name">LOB</div>
+      <div class="shot-hint">${lp}% make · Push them back</div>
+    </button>
+  </div>
+  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">← Change Zone</button>`;
+}
+
+function tapZone(zone){
+  G.selectedZone  = zone;
+  G.selectedTarget = zone;
+
+  const contactPos = getContactPos(zone);
+  const baseRush   = getRush(G.playerPos, contactPos);
+  const rush       = G.nextPlayerComfortable ? 'comfortable' : baseRush;
+  G.playerRush     = rush;
+  G.nextPlayerComfortable = false;
+
+  const isKit  = ['LK','CK','RK'].includes(zone);
+  const isMid  = ['LM','CM','RM'].includes(zone);
+  const isDeep = !isKit && !isMid;
+
+  if(isKit){
+    // Drop or Dink — no further choice needed
+    G.selectedShot  = G.playerPos === 'K' ? 'dink' : 'drop';
+    G.lastMakeInfo  = getMakeInfo('drop', G.playerPos, zone, rush, G.skillLevel);
+    G.lastRoll      = null;
+    G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
+    render();
+  } else if(isMid){
+    // Feet shot — Drive only (only available when opp at M and player not at K)
+    G.selectedShot  = 'drive';
+    G.lastMakeInfo  = getMakeInfo('drive', G.playerPos, zone, rush, G.skillLevel);
+    G.lastRoll      = null;
+    G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
+    render();
+  } else {
+    // Deep zone: from K = lob only; from D or M = choose Drive or Lob
+    if(G.playerPos === 'K'){
+      G.selectedShot  = 'lob';
+      G.lastMakeInfo  = getMakeInfo('lob', G.playerPos, zone, rush, G.skillLevel);
+      G.lastRoll      = null;
+      G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
+      render();
+    } else {
+      G.phase = 'player-shot-for-zone';
+      render();
+    }
+  }
+}
+
+function selectShotForZone(shot){
+  G.selectedShot = shot;
+  G.lastMakeInfo = getMakeInfo(shot, G.playerPos, G.selectedTarget, G.playerRush, G.skillLevel);
+  G.lastRoll     = null;
+  G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
+  render();
+}
+
 // ── RENDER PHASES ────────────────────────────────────────────────────────────
 
 function renderServe(){
   const serving = G.playerServing;
-  const mi = getMakeInfo('drive', 'D', 'CD', 'comfortable', G.skillLevel);
+  const mi  = getMakeInfo('drive', 'D', 'CD', 'comfortable', G.skillLevel);
   const roll = G.serveRoll;
   const rolled = roll !== null;
   return `
@@ -485,18 +665,19 @@ function renderServe(){
     <div class="serve-emoji">${serving?'🏓':'⚡'}</div>
     <div class="serve-title">${serving?'YOUR SERVE':'OPPONENT SERVES'}</div>
     <div class="serve-lines">
-      <div class="serve-line"><span class="serve-dot">▸</span>Both players at Deep (D)</div>
-      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'Serve is a Forehand Drive from Deep — roll to see if it lands':'Opponent serves a Forehand Drive from Deep'}</div>
-      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'If it lands: opponent must return from Deep, then advances to Kitchen':'If it lands: you must return from Deep, then advance to Kitchen'}</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>Both teams start at Deep (D)</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'Serve is a Forehand Drive from Deep — pick target, then roll':'Opponent serves a Forehand Drive from Deep'}</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'If it lands: opponent returns from Deep, then advances to Kitchen':'If it lands: you must return from Deep, then advance to Kitchen'}</div>
     </div>
   </div>
   ${serving ? `
   ${!G.serveTarget ? `
-  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">PICK YOUR SERVE TARGET</div>
-  <div class="target-grid">
-    <button class="target-btn" onclick="pickServeTarget('LD')"><div class="target-code">LD</div><div class="target-name">Left Deep</div></button>
-    <button class="target-btn" onclick="pickServeTarget('CD')"><div class="target-code">CD</div><div class="target-name">Center Deep</div></button>
-    <button class="target-btn" onclick="pickServeTarget('RD')"><div class="target-code">RD</div><div class="target-name">Right Deep</div></button>
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">PICK YOUR SERVE TARGET</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+    ${['LD','CD','RD'].map(t=>`<button class="shot-btn" onclick="pickServeTarget('${t}')">
+      <div class="shot-name">${t}</div>
+      <div class="shot-hint">${t==='LD'?'Left Deep':t==='CD'?'Center Deep':'Right Deep'}</div>
+    </button>`).join('')}
   </div>` : `
   <div class="make-card">
     <div class="make-row"><span class="make-lbl">Forehand Drive → ${G.serveTarget}</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
@@ -506,8 +687,9 @@ function renderServe(){
     <div class="make-row"><span class="make-lbl">Fault</span><span class="make-val m">${mi.makeNum+1}–12</span></div>
   </div>
   <div class="dice-wrap"><div class="dice" id="serve-dice">${rolled?roll:'?'}</div></div>
-  ${rolled?'':` <button class="roll-btn" onclick="rollServe()">ROLL SERVE</button>`}
+  ${rolled?'':`<button class="roll-btn" onclick="rollServe()">ROLL SERVE</button>`}
   ${rolled?`<button class="continue-btn" onclick="resolveServe()">SEE RESULT →</button>`:''}
+  <button class="continue-btn" style="margin-top:6px" onclick="G.serveTarget=null;render()">← Change Target</button>
   `}` : `<button class="continue-btn" onclick="rollOppServe()">OPPONENT SERVES →</button>`}`;
 }
 
@@ -518,11 +700,11 @@ function pickServeTarget(target){
 
 function rollServe(){
   const mi = getMakeInfo('drive','D',G.serveTarget||'CD','comfortable',G.skillLevel);
-  G.serveRoll = rollD12();
+  G.serveRoll     = rollD12();
   G.serveMakeInfo = mi;
   G.totalShots++;
-  const d=document.getElementById('serve-dice');
-  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=G.serveRoll;d.classList.remove('rolling');},300);}
+  const d = document.getElementById('serve-dice');
+  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=G.serveRoll; d.classList.remove('rolling'); },300); }
   render();
 }
 
@@ -532,102 +714,46 @@ function resolveServe(){
   if(outcome==='perfect') G.totalPerfect++;
   else if(outcome==='attackable') G.totalAttackable++;
   else G.totalMiss++;
-
   logShot('You','drive (serve)',G.serveTarget||'CD',G.serveRoll,outcome,'D','D');
-  G.serveRoll=null;
-
+  G.serveRoll = null;
   if(outcome==='miss'){
-    G.pointWinner='opp';
-    G.pointReason='Serve fault. Point to opponent.';
+    G.pointWinner='opp'; G.pointReason='Serve fault. Point to opponent.';
     G.phase='point'; render(); return;
   }
-
-  // Serve landed — opponent returns
-  G.rallyShot=1;
-  G.phase='opp-serve-return';
+  G.rallyShot = 1;
+  G.phase = 'opp-serve-return';
   render();
 }
 
 function rollOppServe(){
-  // Opponent serves — auto roll (always Intermediate skill)
-  const mi = getMakeInfo('drive','D','CD','comfortable','intermediate');
+  const mi  = getMakeInfo('drive','D','CD','comfortable','intermediate');
   const roll = rollD12();
   const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
   logShot('Opp','drive (serve)','CD',roll,outcome,'D','D');
-
   if(outcome==='miss'){
-    G.pointWinner='player';
-    G.pointReason='Opponent serve fault. Point to you!';
+    G.pointWinner='player'; G.pointReason='Opponent serve fault. Point to you!';
     G.phase='point'; render(); return;
   }
-
-  // Serve landed — player returns
-  G.rallyShot=1;
-  const c=document.getElementById('game-content');
-  c.innerHTML=`
+  G.rallyShot = 1;
+  const c = document.getElementById('game-content');
+  c.innerHTML = `
   <div class="outcome-card ${outcome}">
     <div class="outcome-word">SERVE LANDED</div>
     <div class="outcome-roll">Opp rolled ${roll}</div>
-    <div class="outcome-desc">Opponent's serve is in. Now return it from Deep — then you advance to Kitchen.</div>
+    <div class="outcome-desc">Opponent's serve is in. Return it from Deep — then advance to Kitchen.</div>
   </div>
-  <button class="continue-btn" onclick="G.phase='player-serve-return';render()">RETURN THE SERVE →</button>`;
-}
-
-function startServeReturn(){
-  G.rallyShot = 1;
-  if(G.playerServing){
-    G.phase = 'opp-serve-return';
-  } else {
-    G.phase = 'player-serve-return';
-  }
-  render();
-}
-
-function renderPlayerServeReturn(){
-  return `
-  <div>
-    <div class="phase-title">RETURN THE SERVE</div>
-    <div class="phase-sub">You're at Deep (D) — Comfortable · After returning you advance to Kitchen</div>
-  </div>
-  <div class="shot-grid">
-    <button class="shot-btn" onclick="selectServeReturnShot('drop')">
-      <div class="shot-icon">🪶</div>
-      <div class="shot-name">DROP</div>
-      <div class="shot-hint">Soft into kitchen</div>
-    </button>
-    <button class="shot-btn" onclick="selectServeReturnShot('drive')">
-      <div class="shot-icon">💨</div>
-      <div class="shot-name">DRIVE</div>
-      <div class="shot-hint">Flat & fast</div>
-    </button>
-    <button class="shot-btn" onclick="selectServeReturnShot('lob')">
-      <div class="shot-icon">🌙</div>
-      <div class="shot-name">LOB</div>
-      <div class="shot-hint">Push them deep</div>
-    </button>
-  </div>`;
-}
-
-function selectServeReturnShot(shot){
-  G.selectedShot = shot;
-  G.phase = 'player-target';
-  // After target selected, override to serve-return-roll flow
-  G._serveReturn = true;
-  render();
+  <button class="continue-btn" onclick="G._serveReturn=true;G.phase='player-serve-return';render()">RETURN THE SERVE →</button>`;
 }
 
 function renderOppServeReturn(){
-  // AI returns from D — auto-pick shot and roll
-  const shot = oppChooseShot('D');
+  const shot   = oppChooseShot('D');
   const target = oppChooseTarget(shot, 'D', G.playerPos);
-  const mi = getMakeInfo(shot, 'D', target, 'comfortable', 'intermediate');
-  const roll = rollD12();
+  const mi     = getMakeInfo(shot, 'D', target, 'comfortable', 'intermediate');
+  const roll   = rollD12();
   const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
   logShot('Opp', shot, target, roll, outcome, 'D', outcome!=='miss'?'K':'D');
-
   if(outcome==='miss'){
-    G.pointWinner='player';
-    G.pointReason=`Opponent missed their return (${shotLabel(shot)}). Point to you!`;
+    G.pointWinner='player'; G.pointReason=`Opponent missed their return (${shotLabel(shot)}). Point to you!`;
     return `
     <div class="outcome-card perfect">
       <div class="outcome-word">RETURN MISS!</div>
@@ -636,9 +762,7 @@ function renderOppServeReturn(){
     </div>
     <button class="continue-btn" onclick="G.phase='point';render()">COLLECT POINT</button>`;
   }
-
-  // Made return — opp goes to K, player stays at D
-  G.oppPos = 'K';
+  G.oppPos  = 'K';
   G.oppRush = 'comfortable';
   return `
   <div class="outcome-card ${outcome}">
@@ -650,18 +774,19 @@ function renderOppServeReturn(){
 }
 
 function beginThirdShot(){
-  G.phase = 'player-shot';
+  G.phase = 'player-zone';
   G.rallyShot++;
   render();
 }
 
 function renderPlayerServeReturnRoll(){
-  const mi = G.lastMakeInfo;
+  const mi   = G.lastMakeInfo;
   const roll = G.lastRoll;
   const rolled = roll !== null;
+  const shotDisp = G.playerPos === 'K' && G.selectedShot === 'drop' ? 'Dink' : shotLabel(G.selectedShot);
   return `
   <div>
-    <div class="phase-title">${shotLabel(G.selectedShot)} → ${G.selectedTarget}</div>
+    <div class="phase-title">${shotDisp} → ${G.selectedTarget}</div>
     <div class="phase-sub">Return from Deep · Comfortable · Make it and advance to Kitchen</div>
   </div>
   <div class="make-card">
@@ -672,13 +797,16 @@ function renderPlayerServeReturnRoll(){
     <div class="make-row"><span class="make-lbl">Miss = point to opponent</span><span class="make-val m">${mi.makeNum+1} – 12</span></div>
   </div>
   <div class="dice-wrap"><div class="dice" id="dice-el">${rolled?roll:'?'}</div></div>
-  ${rolled?'':` <button class="roll-btn" onclick="doServeReturnRoll()">ROLL D12</button>`}
-  ${rolled?`<button class="continue-btn" onclick="resolveServeReturn()">SEE RESULT →</button>`:''}`;
+  ${rolled ? '' : `<button class="roll-btn" onclick="doServeReturnRoll()">ROLL D12</button>`}
+  ${rolled ? `<button class="continue-btn" onclick="resolveServeReturn()">SEE RESULT →</button>` : ''}
+  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-serve-return';render()">← Change Target</button>`;
 }
 
 function doServeReturnRoll(){
   G.lastRoll = rollD12();
   G.totalShots++;
+  const d = document.getElementById('dice-el');
+  if(d){ d.classList.add('rolling'); setTimeout(()=>d.classList.remove('rolling'),500); }
   render();
 }
 
@@ -688,23 +816,14 @@ function resolveServeReturn(){
   if(outcome==='perfect') G.totalPerfect++;
   else if(outcome==='attackable') G.totalAttackable++;
   else G.totalMiss++;
-
   logShot('You', G.selectedShot, G.selectedTarget, G.lastRoll, outcome, 'D', outcome!=='miss'?'K':'D');
-
   if(outcome==='miss'){
-    G.pointWinner='opp';
-    G.pointReason=`Your return (${shotLabel(G.selectedShot)}) missed. Point to opponent.`;
-    G._serveReturn=false;
-    G.phase='point'; render(); return;
+    G.pointWinner='opp'; G.pointReason=`Your return (${shotLabel(G.selectedShot)}) missed. Point to opponent.`;
+    G._serveReturn=false; G.phase='point'; render(); return;
   }
-
-  // Made it — advance to K, opponent stays at D
   const roll = G.lastRoll;
-  G.playerPos='K';
-  G.playerRush='comfortable';
-  G._serveReturn=false;
-  G.lastRoll=null;
-
+  G.playerPos='K'; G.playerRush='comfortable';
+  G._serveReturn=false; G.lastRoll=null;
   const c = document.getElementById('game-content');
   c.innerHTML=`
   <div class="outcome-card ${outcome}">
@@ -715,85 +834,14 @@ function resolveServeReturn(){
   <button class="continue-btn" onclick="G.phase='opp-turn';G.rallyShot++;render()">OPPONENT'S THIRD SHOT →</button>`;
 }
 
-function renderPlayerShot(){
-  const fromK = G.playerPos==='K';
-  return `
-  <div>
-    <div class="phase-title">YOUR SHOT</div>
-    <div class="phase-sub">You're at ${tierLabel(G.playerPos)}${G.nextPlayerComfortable?' · <span style="color:var(--success)">✓ Comfortable bonus</span>':''}</div>
-  </div>
-  <div class="shot-grid">
-    <button class="shot-btn" onclick="selectShot('drop')">
-      <div class="shot-icon">🪶</div>
-      <div class="shot-name">DROP</div>
-      <div class="shot-hint">Soft into kitchen</div>
-    </button>
-    <button class="shot-btn" onclick="selectShot('drive')" ${fromK?'disabled title="From Kitchen use Smash"':''}>
-      <div class="shot-icon">💨</div>
-      <div class="shot-name">${fromK?'SMASH':'DRIVE'}</div>
-      <div class="shot-hint">${fromK?'Only from K':'Flat & fast'}</div>
-    </button>
-    <button class="shot-btn" onclick="selectShot('lob')">
-      <div class="shot-icon">🌙</div>
-      <div class="shot-name">LOB</div>
-      <div class="shot-hint">Push them deep</div>
-    </button>
-  </div>
-  ${fromK?`<button class="shot-btn" style="width:100%" onclick="selectShot('drive')">
-    <div class="shot-icon">💥</div>
-    <div class="shot-name">SMASH</div>
-    <div class="shot-hint">You're at the kitchen — put it away!</div>
-  </button>`:''}`;
-}
-
-function selectShot(shot){
-  G.selectedShot = shot;
-  G.phase = 'player-target';
-  render();
-}
-
-function renderPlayerTarget(){
-  const shot = G.selectedShot;
-  let targets;
-  if(shot==='drop') targets=[{code:'LK',name:'Left Kitchen'},{code:'CK',name:'Center Kitchen'},{code:'RK',name:'Right Kitchen'}];
-  else if(shot==='lob') targets=[{code:'LD',name:'Left Deep'},{code:'CD',name:'Center Deep'},{code:'RD',name:'Right Deep'}];
-  else targets=[{code:'LD',name:'Left Deep'},{code:'CD',name:'Center Deep'},{code:'RD',name:'Right Deep'}];
-
-  return `
-  <div>
-    <div class="phase-title">${shot==='drop'?'🪶':shot==='drive'?'💨':'🌙'} TARGET ZONE</div>
-    <div class="phase-sub">${shotLabel(shot)} — pick where it lands</div>
-  </div>
-  <div class="target-grid">
-    ${targets.map(t=>`
-    <button class="target-btn" onclick="selectTarget('${t.code}')">
-      <div class="target-code">${t.code}</div>
-      <div class="target-name">${t.name}</div>
-    </button>`).join('')}
-  </div>
-  <button class="continue-btn" onclick="G.phase=G._serveReturn?'player-serve-return':'player-shot';render()">← Back</button>`;
-}
-
-function selectTarget(target){
-  G.selectedTarget = target;
-  const contactPos = getContactPos(target);
-  const baseRush = getRush(G.playerPos, contactPos);
-  // next-shot comfortable bonus overrides rush
-  const rush = G.nextPlayerComfortable ? 'comfortable' : baseRush;
-  G.playerRush = rush;
-  G.nextPlayerComfortable = false;
-  G.lastMakeInfo = getMakeInfo(G.selectedShot, G.playerPos, target, rush, G.skillLevel);
-  G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
-  render();
-}
-
 function renderPlayerRoll(){
-  const mi = G.lastMakeInfo;
+  const mi   = G.lastMakeInfo;
   const roll = G.lastRoll;
   const rolled = roll !== null;
+  const shotDisp = G.selectedShot === 'dink' ? 'Dink' : shotLabel(G.selectedShot);
   return `
   <div>
-    <div class="phase-title">${shotLabel(G.selectedShot)} → ${G.selectedTarget}</div>
+    <div class="phase-title">${shotDisp} → ${G.selectedTarget}</div>
     <div class="phase-sub">From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'}</div>
   </div>
   <div class="make-card">
@@ -803,12 +851,10 @@ function renderPlayerRoll(){
     <div class="make-row"><span class="make-lbl">Attackable band</span><span class="make-val a">${mi.attackableMin} – ${mi.attackableMax}</span></div>
     <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${mi.makeNum+1} – 12</span></div>
   </div>
-  <div class="dice-wrap">
-    <div class="dice" id="dice-el">${rolled?roll:'?'}</div>
-  </div>
-  ${rolled?'':
-    `<button class="roll-btn" onclick="doPlayerRoll()">ROLL D12</button>`}
-  ${rolled?`<button class="continue-btn" onclick="resolvePlayerOutcome()">SEE RESULT →</button>`:''}`;
+  <div class="dice-wrap"><div class="dice" id="dice-el">${rolled?roll:'?'}</div></div>
+  ${rolled ? '' : `<button class="roll-btn" onclick="doPlayerRoll()">ROLL D12</button>`}
+  ${rolled ? `<button class="continue-btn" onclick="resolvePlayerOutcome()">SEE RESULT →</button>` : ''}
+  <button class="continue-btn" onclick="G.selectedZone=null;${G.selectedShot==='drive'||G.selectedShot==='lob'?`G.phase='player-shot-for-zone'`:`G.phase='player-zone'`};render()">← Change Shot</button>`;
 }
 
 function doPlayerRoll(){
@@ -830,19 +876,18 @@ function resolvePlayerOutcome(){
 }
 
 function renderPlayerOutcome(){
-  const shot = G.selectedShot;
-  const target = G.selectedTarget;
+  const shot    = G.selectedShot;
+  const target  = G.selectedTarget;
   const outcome = G.lastOutcome;
-  const roll = G.lastRoll;
+  const roll    = G.lastRoll;
   const contactPos = getContactPos(target);
 
   let desc='', newYouPos='', newOppPos='';
 
   if(outcome==='miss'){
     desc='Out or into the net. Point to opponent.';
-    newYouPos = G.playerPos; newOppPos = G.oppPos;
+    newYouPos=G.playerPos; newOppPos=G.oppPos;
   } else if(shot==='drive'){
-    // Drive special: receiver doesn't move
     newOppPos = G.oppPos;
     if(outcome==='perfect'){
       newYouPos = contactPos==='D'?'M':contactPos;
@@ -850,27 +895,23 @@ function renderPlayerOutcome(){
       G.nextPlayerComfortable = true;
     } else {
       newYouPos = contactPos;
-      desc='Drive lands but receiver blocks it back. Play continues — your next shot.';
+      desc='Drive lands — receiver blocks it back. Your next shot.';
     }
   } else if(outcome==='perfect'){
-    if(shot==='drop'){
+    if(shot==='drop'||shot==='dink'){
       newYouPos='K'; newOppPos='K';
       desc='Perfect drop into the kitchen! RESET — both players advance to the Kitchen line.';
-    } else { // lob
-      newYouPos = contactPos;
-      newOppPos = 'D';
-      desc='Perfect lob! Opponent is pushed all the way back to Deep. You hold your position.';
+    } else {
+      newYouPos = contactPos; newOppPos='D';
+      desc='Perfect lob! Opponent is pushed all the way back to Deep.';
     }
-  } else { // attackable
-    newYouPos = contactPos; newOppPos = G.oppPos;
-    if(shot==='drop') desc='Drop lands but sits up a bit — attackable if opponent is at the Kitchen.';
-    else desc='Lob is catchable — opponent can handle it, no damage done.';
+  } else {
+    newYouPos=contactPos; newOppPos=G.oppPos;
+    if(shot==='drop'||shot==='dink') desc='Drop lands but sits up — attackable if opponent is at the Kitchen.';
+    else desc='Lob is catchable — no damage done.';
   }
 
-  // Log
   logShot('You', shot, target, roll, outcome, G.playerPos, newYouPos);
-
-  // Apply positions
   G.playerPos = newYouPos;
   if(shot!=='drive') G.oppPos = newOppPos;
 
@@ -880,20 +921,18 @@ function renderPlayerOutcome(){
   }
 
   if(shot==='drive'){
-    // Driver takes the next shot (opponent auto-blocked)
-    G.phase='player-shot'; G.rallyShot++;
-    return renderMiniOutcome(outcome, roll, desc)+
-      `<button class="continue-btn" onclick="G.phase='player-shot';render()">YOUR NEXT SHOT →</button>`;
+    G.selectedZone=null;
+    G.phase='player-zone'; G.rallyShot++;
+    return renderMiniOutcome(outcome,roll,desc)+
+      `<button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">YOUR NEXT SHOT →</button>`;
   }
 
-  // Check if player left an Attackable and opponent is at K → opponent smashes
   if(outcome==='attackable' && G.oppPos==='K'){
-    return renderMiniOutcome(outcome, roll, desc)+
+    return renderMiniOutcome(outcome,roll,desc)+
       `<button class="danger-btn" onclick="G.phase='opp-smash';render()">OPPONENT SMASHES ⚡</button>`;
   }
 
-  // Normal: opponent's turn
-  return renderMiniOutcome(outcome, roll, desc)+
+  return renderMiniOutcome(outcome,roll,desc)+
     `<button class="continue-btn" onclick="startOppTurn()">OPPONENT'S TURN →</button>`;
 }
 
@@ -907,20 +946,18 @@ function renderMiniOutcome(outcome, roll, desc){
 }
 
 function startOppTurn(){
-  G.phase='opp-turn';
-  G.rallyShot++;
-  // Compute opp shot & contact position
-  const oppShot = oppChooseShot(G.oppPos);
+  G.phase='opp-turn'; G.rallyShot++;
+  const oppShot   = oppChooseShot(G.oppPos);
   const oppTarget = oppChooseTarget(oppShot, G.oppPos, G.playerPos);
   const contactPos = getContactPos(oppTarget);
-  const baseRush = getRush(G.oppPos, contactPos);
-  const rush = G.nextOppComfortable ? 'comfortable' : baseRush;
+  const baseRush  = getRush(G.oppPos, contactPos);
+  const rush      = G.nextOppComfortable ? 'comfortable' : baseRush;
   G.nextOppComfortable = false;
   G.oppRush = rush;
-  G.oppSelectedShot = oppShot;
+  G.oppSelectedShot  = oppShot;
   G.oppSelectedTarget = oppTarget;
-  G.oppContactPos = contactPos;
-  G.oppMakeInfo = getMakeInfo(oppShot, G.oppPos, oppTarget, rush, 'intermediate');
+  G.oppContactPos    = contactPos;
+  G.oppMakeInfo      = getMakeInfo(oppShot, G.oppPos, oppTarget, rush, 'intermediate');
   render();
 }
 
@@ -943,19 +980,17 @@ function renderOppTurn(){
 }
 
 function rollOppShot(){
-  const roll = rollD12();
-  const mi = G.oppMakeInfo;
+  const roll    = rollD12();
+  const mi      = G.oppMakeInfo;
   const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
-  const shot = G.oppSelectedShot;
-  const target = G.oppSelectedTarget;
+  const shot    = G.oppSelectedShot;
+  const target  = G.oppSelectedTarget;
   const contactPos = G.oppContactPos;
 
-  G.lastRoll = roll;
-  G.lastOutcome = outcome;
+  G.lastRoll=roll; G.lastOutcome=outcome;
 
-  // Animate
   const d = document.getElementById('opp-dice');
-  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
 
   let desc='', newOppPos='', newYouPos='';
 
@@ -963,14 +998,14 @@ function rollOppShot(){
     desc='Opponent missed! Point to you.';
     newOppPos=G.oppPos; newYouPos=G.playerPos;
   } else if(shot==='drive'){
-    newYouPos=G.playerPos; // player doesn't move on a drive
+    newYouPos=G.playerPos;
     if(outcome==='perfect'){
       newOppPos=contactPos==='D'?'M':contactPos;
       desc='Opponent drive is perfect — you can only block. They advance and get a Comfortable next shot.';
       G.nextOppComfortable=true;
     } else {
       newOppPos=contactPos;
-      desc='Drive is blocked back. Opponent continues.';
+      desc='Drive blocked back. Opponent continues.';
     }
   } else if(outcome==='perfect'){
     if(shot==='drop'){
@@ -980,38 +1015,27 @@ function rollOppShot(){
       newOppPos=contactPos; newYouPos='D';
       desc='Perfect lob! You\'re pushed all the way back to Deep.';
     }
-  } else { // attackable
+  } else {
     newOppPos=contactPos; newYouPos=G.playerPos;
     desc=shot==='drop'?'Drop sits up — attackable if you\'re at the Kitchen.':'Lob is catchable.';
   }
 
   logShot('Opp', shot, target, roll, outcome, G.oppPos, newOppPos);
-
   G.oppPos = newOppPos;
   if(shot!=='drive') G.playerPos = newYouPos;
 
-  const c = document.getElementById('game-content');
-
-  // Show result and next action
   if(outcome==='miss'){
     G.pointWinner='player'; G.pointReason=`Opponent's ${shotLabel(shot)} missed.`;
     G.phase='point';
     setTimeout(()=>render(),600); return;
   }
-
   if(shot==='drive'){
-    // opponent takes next shot
-    setTimeout(()=>{ G.phase='opp-turn'; G.rallyShot++; startOppTurn(); },600);
-    return;
+    setTimeout(()=>{ G.phase='opp-turn'; startOppTurn(); },600); return;
   }
-
   if(outcome==='attackable' && G.playerPos==='K'){
-    // Player can smash!
-    setTimeout(()=>{ G.phase='player-smash'; render(); },600);
-    return;
+    setTimeout(()=>{ G.phase='player-smash'; render(); },600); return;
   }
-
-  setTimeout(()=>{ G.phase='player-shot'; G.rallyShot++; render(); },600);
+  setTimeout(()=>{ G.selectedZone=null; G.phase='player-zone'; G.rallyShot++; render(); },600);
 }
 
 function renderPlayerSmash(){
@@ -1034,31 +1058,28 @@ function renderPlayerSmash(){
 function rollPlayerSmash(){
   const roll = rollD12();
   const makeNum=11, perfectMax=6;
-  const outcome = roll===12?'miss':resolveRoll(roll, makeNum, perfectMax);
+  const outcome = roll===12?'miss':resolveRoll(roll,makeNum,perfectMax);
   G.smashRoll=roll; G.smashOutcome=outcome;
   const d=document.getElementById('smash-dice');
-  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
   logShot('You','smash','—',roll,outcome,G.playerPos,G.playerPos);
-
   if(outcome==='perfect'){
     G.pointWinner='player'; G.pointReason='Clean smash put-away! Point to you.';
-    setTimeout(()=>{G.phase='point';render();},600); return;
+    setTimeout(()=>{ G.phase='point'; render(); },600); return;
   }
   if(roll===12){
     G.pointWinner='opp'; G.pointReason='Smash whiff (rolled 12). Point back to opponent.';
-    setTimeout(()=>{G.phase='point';render();},600); return;
+    setTimeout(()=>{ G.phase='point'; render(); },600); return;
   }
-  // Attackable smash — opponent gets a Defensive Block
   setTimeout(()=>{ G.phase='opp-block'; render(); },600);
 }
 
 function renderOppSmash(){
-  const mi = TABLES.drive['K']['c'];
+  const mi   = TABLES.drive['K']['c'];
   const roll = rollD12();
-  const outcome = roll===12?'miss':resolveRoll(roll, mi.m, mi.p);
+  const outcome = roll===12?'miss':resolveRoll(roll,mi.m,mi.p);
   G.smashRoll=roll; G.smashOutcome=outcome;
   logShot('Opp','smash','—',roll,outcome,G.oppPos,G.oppPos);
-
   if(outcome==='perfect'){
     G.pointWinner='opp'; G.pointReason='Opponent clean smash put-away! Point to opponent.';
     return `
@@ -1079,7 +1100,6 @@ function renderOppSmash(){
     </div>
     <button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;
   }
-  // Attackable smash — player gets Defensive Block
   return `
   <div class="outcome-card attackable">
     <div class="outcome-word">HARD SMASH!</div>
@@ -1090,10 +1110,9 @@ function renderOppSmash(){
 }
 
 function renderPlayerBlock(){
-  const defPos = G.playerPos;
+  const defPos    = G.playerPos;
   const blockData = TABLES.block[defPos];
   if(!blockData){
-    // At K = automatic point to smasher
     G.pointWinner='opp'; G.pointReason='No block from Kitchen — too close to react. Point to opponent.';
     G.phase='point'; render(); return '';
   }
@@ -1114,24 +1133,21 @@ function renderPlayerBlock(){
 }
 
 function rollPlayerBlock(){
-  const defPos=G.playerPos;
-  const blockData=TABLES.block[defPos];
+  const defPos    = G.playerPos;
+  const blockData = TABLES.block[defPos];
   if(!blockData){ G.pointWinner='opp'; G.pointReason='No block from Kitchen.'; G.phase='point'; render(); return; }
-  const roll=rollD12();
-  const outcome=resolveRoll(roll, blockData.m, blockData.p);
+  const roll    = rollD12();
+  const outcome = resolveRoll(roll, blockData.m, blockData.p);
   G.blockRoll=roll; G.blockOutcome=outcome;
-  const d=document.getElementById('block-dice');
-  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  const d = document.getElementById('block-dice');
+  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
   logShot('You','block','—',roll,outcome,defPos,defPos);
-
   if(outcome==='miss'){
-    G.pointWinner='opp'; G.pointReason='Block missed — couldn\'t get a paddle on it. Point to opponent.';
-    setTimeout(()=>{G.phase='point';render();},600); return;
+    G.pointWinner='opp'; G.pointReason='Block missed — point to opponent.';
+    setTimeout(()=>{ G.phase='point'; render(); },600); return;
   }
   if(outcome==='perfect'){
-    // Reset — both to K, smasher can't re-attack
     G.playerPos='K'; G.oppPos='K';
-    G.pointReason='';
     setTimeout(()=>{
       const c=document.getElementById('game-content');
       c.innerHTML=`
@@ -1140,30 +1156,26 @@ function rollPlayerBlock(){
         <div class="outcome-roll">Rolled ${roll}</div>
         <div class="outcome-desc">Perfect dig — RESET. Both players go to the Kitchen line. Rally continues!</div>
       </div>
-      <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">CONTINUE RALLY →</button>`;
+      <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE RALLY →</button>`;
     },600); return;
   }
-  // Attackable block — smasher (opp at K) gets another smash
   if(G.oppPos==='K'){
     setTimeout(()=>{ G.phase='opp-smash'; render(); },600); return;
   }
-  // Opp not at K — rally continues
-  setTimeout(()=>{ G.phase='player-shot'; G.rallyShot++; render(); },600);
+  setTimeout(()=>{ G.selectedZone=null; G.phase='player-zone'; G.rallyShot++; render(); },600);
 }
 
 function renderOppBlock(){
-  // Opponent attempts block after an Attackable smash from player
-  const defPos = G.oppPos;
+  const defPos    = G.oppPos;
   const blockData = TABLES.block[defPos];
   if(!blockData){
     G.pointWinner='player'; G.pointReason='No block from Kitchen for opponent. Point to you!';
     G.phase='point'; render(); return '';
   }
-  const roll=rollD12();
-  const outcome=resolveRoll(roll, blockData.m, blockData.p);
+  const roll    = rollD12();
+  const outcome = resolveRoll(roll, blockData.m, blockData.p);
   G.blockRoll=roll; G.blockOutcome=outcome;
   logShot('Opp','block','—',roll,outcome,defPos,defPos);
-
   if(outcome==='miss'){
     G.pointWinner='player'; G.pointReason='Opponent couldn\'t get a paddle on it. Point to you!';
     return `
@@ -1178,9 +1190,8 @@ function renderOppBlock(){
     <div class="outcome-card attackable"><div class="outcome-word">CLEAN BLOCK</div>
     <div class="outcome-roll">Opp rolled ${roll}</div>
     <div class="outcome-desc">Opponent digs it out perfectly — RESET. Both to Kitchen. Rally continues.</div></div>
-    <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">CONTINUE →</button>`;
+    <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE →</button>`;
   }
-  // Attackable block — player at K gets another smash
   if(G.playerPos==='K'){
     return `
     <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
@@ -1192,22 +1203,16 @@ function renderOppBlock(){
   <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
   <div class="outcome-roll">Opp rolled ${roll}</div>
   <div class="outcome-desc">Weak dig but you're not at the net. Rally continues.</div></div>
-  <button class="continue-btn" onclick="G.phase='player-shot';G.rallyShot++;render()">YOUR SHOT →</button>`;
+  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">YOUR SHOT →</button>`;
 }
 
 function renderPoint(){
   const won = G.pointWinner==='player';
   if(won){ G.playerScore++; } else { G.oppScore++; }
-  // Next server = point winner
   G.playerServing = won;
   G.rallyNum++;
-
-  // Check game over (first to 11, win by 2)
-  const gameOver = (G.playerScore>=11||G.oppScore>=11) &&
-    Math.abs(G.playerScore-G.oppScore)>=2;
-
+  const gameOver = (G.playerScore>=11||G.oppScore>=11) && Math.abs(G.playerScore-G.oppScore)>=2;
   if(gameOver){ setTimeout(()=>showGameOver(),1200); }
-
   return `
   <div class="point-screen">
     <div class="point-emoji">${won?'🎉':'😤'}</div>
@@ -1222,12 +1227,12 @@ function renderPoint(){
 }
 
 function nextRally(){
-  // Both start at D on serve — server rolls, receiver returns before advancing to K
   G.playerPos='D'; G.oppPos='D';
   G.serveRoll=null; G.serveMakeInfo=null; G.serveTarget=null;
   G.playerRush='comfortable'; G.oppRush='comfortable';
   G.nextPlayerComfortable=false; G.nextOppComfortable=false;
-  G.rallyShot=0;
+  G.rallyShot=0; G.selectedZone=null; G.selectedTarget=null; G.selectedShot=null;
+  G._serveReturn=false;
   G.phase='serve';
   render();
 }
@@ -1241,7 +1246,7 @@ function showGameOver(){
   document.getElementById('go-msg').textContent = won
     ? `Winner! You took it ${G.playerScore}–${G.oppScore}.`
     : `Opponent wins ${G.oppScore}–${G.playerScore}. Keep training!`;
-  const pct = G.totalShots>0?Math.round(G.totalPerfect/G.totalShots*100):0;
+  const pct  = G.totalShots>0?Math.round(G.totalPerfect/G.totalShots*100):0;
   const aPct = G.totalShots>0?Math.round(G.totalAttackable/G.totalShots*100):0;
   document.getElementById('go-stats').innerHTML=`
   <div class="go-stat-row"><span class="go-stat-lbl">Total shots</span><span class="go-stat-val">${G.totalShots}</span></div>
