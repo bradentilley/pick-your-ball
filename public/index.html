@@ -40,7 +40,8 @@ html,body{height:100%;background:#2d7a3d;color:var(--text);font-family:'Inter',s
 .btn-start:active{transform:scale(.98)}
 
 /* ── GAME ── */
-#screen-game{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+#screen-game{height:100dvh;flex-direction:column;overflow:hidden;display:none}
+#screen-game.active{display:flex}
 
 /* Score bar */
 .score-bar{
@@ -78,7 +79,7 @@ html,body{height:100%;background:#2d7a3d;color:var(--text);font-family:'Inter',s
 
 /* ── DESKTOP SIDE-BY-SIDE LAYOUT ── */
 @media(min-width:700px){
-  #screen-game{
+  #screen-game.active{
     display:grid;
     grid-template-columns:1fr 380px;
     grid-template-rows:auto 1fr auto;
@@ -209,7 +210,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:3px 0}
 </div>
 
 <!-- GAME -->
-<div id="screen-game" style="display:none">
+<div id="screen-game">
   <div class="score-bar">
     <div class="score-side">
       <div class="score-who">You</div>
@@ -380,7 +381,7 @@ function startGame(){
   };
   sessionLog=[];
   document.getElementById('screen-setup').style.display='none';
-  document.getElementById('screen-game').style.display='flex';
+  document.getElementById('screen-game').classList.add('active');
   render();
 }
 function setSkill(s){document.querySelectorAll('.skill-btn').forEach(b=>b.classList.toggle('active',b.dataset.skill===s));}
@@ -850,7 +851,7 @@ function nextRally(){
 }
 
 function showGameOver(){
-  document.getElementById('screen-game').style.display='none';
+  document.getElementById('screen-game').classList.remove('active');
   document.getElementById('screen-gameover').style.display='flex';
   const won=G.playerScore>G.oppScore;
   document.getElementById('go-title').textContent=won?'YOU WIN!':'GOOD EFFORT';
