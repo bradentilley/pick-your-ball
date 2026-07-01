@@ -357,6 +357,18 @@ function pct(shot,pos,target,rush,skill){return Math.round(getMakeInfo(shot,pos,
 const ZONE_NAMES={LD:'deep left',CD:'deep center',RD:'deep right',LM:'mid left',CM:'mid center',RM:'mid right',LK:'left kitchen',CK:'center kitchen',RK:'right kitchen'};
 function zn(z){return ZONE_NAMES[z]||z;}
 
+// Serve-specific table: radial difficulty from center (CM easiest, corners hardest)
+const SERVE_TABLE={
+  CM:{makeNum:10,perfectMax:5,attackableMin:6,attackableMax:10},
+  LM:{makeNum:9, perfectMax:5,attackableMin:6,attackableMax:9},
+  RM:{makeNum:9, perfectMax:5,attackableMin:6,attackableMax:9},
+  CD:{makeNum:8, perfectMax:4,attackableMin:5,attackableMax:8},
+  LD:{makeNum:6, perfectMax:3,attackableMin:4,attackableMax:6},
+  RD:{makeNum:6, perfectMax:3,attackableMin:4,attackableMax:6},
+};
+function getServeMakeInfo(target){return SERVE_TABLE[target]||SERVE_TABLE.CD;}
+function servePct(target){return Math.round((SERVE_TABLE[target]||SERVE_TABLE.CD).makeNum/12*100);}
+
 // ── OPPONENT AI ──────────────────────────────────────────────────────────────
 function oppChooseShot(p){const r=Math.random();if(p==='K')return r<.75?'drop':'drive';if(p==='M')return r<.5?'drop':r<.8?'drive':'lob';return r<.55?'drop':r<.82?'drive':'lob';}
 function oppChooseTarget(shot,oPos,pPos){if(shot==='drop'){if(pPos==='K')return'CK';return Math.random()<.5?'CK':Math.random()<.5?'LK':'RK';}if(shot==='lob')return Math.random()<.5?'LD':'RD';const t=['LD','CD','RD'];return t[Math.floor(Math.random()*t.length)];}
@@ -434,10 +446,7 @@ function updateCourtSVG(){
     if(servePickMode){
       // Serve: deep + mid valid (kitchen off-limits)
       active=isDeep||isMid;
-      if(active){
-        const p=pct('drive','D',code,'comfortable',skill);
-        label=code;pctLine='SERVE '+p+'%';
-      }
+      if(active){label=code;pctLine='SERVE '+servePct(code)+'%';}
     } else if(showZones){
       if(isKit){active=true;}
       else if(isDeep){active=true;}
@@ -529,7 +538,7 @@ function renderServe(){
     return`<div class="court-hint">TAP WHERE TO SERVE</div>
     <div class="phase-sub" style="text-align:center;margin-top:6px">Drive serve from Deep · Kitchen zones off-limits<br>Percentages shown on court · Tap to lock in target</div>`;
   }
-  const mi=G.serveMakeInfo||getMakeInfo('drive','D',G.serveTarget,'comfortable',G.skillLevel);
+  const mi=G.serveMakeInfo||getServeMakeInfo(G.serveTarget);
   const rolled=G.serveRoll!==null;
   return`<div class="make-card">
     <div class="make-row"><span class="make-lbl">Serve → ${G.serveTarget}</span><span class="make-val">${mi.makeNum}/12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
@@ -686,7 +695,7 @@ function renderPoint(){
 
 function pickServeTarget(target){
   G.serveTarget=target;
-  G.serveMakeInfo=getMakeInfo('drive','D',target,'comfortable',G.skillLevel);
+  G.serveMakeInfo=getServeMakeInfo(target);
   G.serveRoll=null;
   render();
 }
