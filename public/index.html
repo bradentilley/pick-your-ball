@@ -8,199 +8,159 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0b1f14;
-  --surface:#122a1c;
-  --card:#193524;
+  --bg:#0a1a10;
+  --surface:#112219;
+  --card:#172d1f;
   --border:rgba(255,255,255,0.08);
   --accent:#c8e63c;
-  --accent-dark:#9eb52e;
   --text:#e8f5ea;
-  --muted:#5d8a6a;
+  --muted:#4d7a5a;
   --success:#4ade80;
   --danger:#ff6b6b;
   --warning:#ffd93d;
   --opp:#ff8042;
 }
-html,body{min-height:100dvh;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html,body{height:100%;background:#2d7a3d;color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
 
 /* ── SETUP ── */
-#screen-setup{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;color:var(--accent);line-height:1;margin-bottom:6px}
-.logo-sub{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:48px}
-.setup-ball{font-size:64px;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(200,230,60,0.4))}
-.skill-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-.skill-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:320px;margin-bottom:32px}
-.skill-btn{padding:14px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
-.skill-btn .skill-icon{font-size:20px;display:block;margin-bottom:4px}
+#screen-setup{
+  min-height:100dvh;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;text-align:center;overflow-y:auto
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:6px;color:var(--accent);line-height:1;margin-bottom:4px}
+.logo-sub{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:44px}
+.setup-ball{font-size:56px;margin-bottom:14px;filter:drop-shadow(0 0 20px rgba(200,230,60,0.4))}
+.skill-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.skill-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:300px;margin-bottom:28px}
+.skill-btn{padding:12px 6px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.skill-btn .skill-icon{font-size:18px;display:block;margin-bottom:3px}
 .skill-btn.active{border-color:var(--accent);background:rgba(200,230,60,.1);color:var(--accent)}
-.btn-start{width:100%;max-width:320px;padding:20px;background:var(--accent);color:#0b1f14;border:none;border-radius:14px;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;cursor:pointer;transition:all .2s}
+.btn-start{width:100%;max-width:300px;padding:18px;background:var(--accent);color:#0a1a10;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;cursor:pointer}
 .btn-start:active{transform:scale(.98)}
 
 /* ── GAME ── */
-#screen-game{min-height:100dvh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,16px)}
+#screen-game{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
-/* Score header */
-.score-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.score-side{text-align:center;min-width:60px}
-.score-who{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.score-num{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:var(--text)}
+/* Score bar */
+.score-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;z-index:20
+}
+.score-side{min-width:54px}
+.score-who{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.score-num{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;color:var(--text)}
 .score-num.lead{color:var(--accent)}
-.score-mid{display:flex;flex-direction:column;align-items:center;gap:2px}
-.score-sep{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)}
+.score-opp-num{text-align:right}
+.score-opp-num.lead{color:var(--danger)}
+.score-mid{text-align:center;flex:1}
 .rally-info{font-size:10px;font-weight:600;color:var(--muted)}
+.rush-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-top:2px;border:1px solid var(--border);color:var(--muted)}
+.rush-badge.stretched{border-color:var(--warning);color:var(--warning);background:rgba(255,215,61,.08)}
+.rush-badge.comfortable{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.06)}
 
-/* Compact court strip (always visible at top) */
-.court-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 16px}
-.court-row{display:flex;gap:8px;align-items:center;justify-content:center}
-.court-side{flex:1;display:flex;flex-direction:column;gap:5px}
-.court-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center}
-.court-tiers{display:flex;gap:4px}
-.tier-box{flex:1;padding:6px 4px;border:1.5px solid var(--border);border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);background:var(--card);transition:all .3s}
-.tier-box.you-here{border-color:var(--accent);background:rgba(200,230,60,.15);color:var(--accent)}
-.tier-box.opp-here{border-color:var(--opp);background:rgba(255,128,66,.15);color:var(--opp)}
-.net-col{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 2px}
-.net-line{width:2px;height:18px;background:rgba(255,255,255,.5);border-radius:1px}
-.net-txt{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.rush-row{display:flex;justify-content:space-between;margin-top:7px}
-.rush-chip{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
-.rush-chip.comfortable{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.08)}
-.rush-chip.stretched{border-color:var(--warning);color:var(--warning);background:rgba(255,217,61,.08)}
+/* Court */
+#court-wrap{flex-shrink:0;width:100%;position:relative;background:#2d7a3d}
+#court-svg{width:100%;display:block;touch-action:manipulation}
 
-/* Content */
-.game-content{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
-.phase-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;line-height:1}
-.phase-sub{font-size:12px;color:var(--muted);margin-top:3px}
+/* Action panel */
+#action-panel{
+  flex:1;overflow-y:auto;
+  background:var(--bg);
+  padding:14px 16px;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
+  display:flex;flex-direction:column;gap:10px
+}
+.phase-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;line-height:1}
+.phase-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
-/* ── INTERACTIVE COURT PICKER ── */
-.cp-wrap{border-radius:12px;overflow:hidden;border:1.5px solid var(--border);background:var(--card);user-select:none}
-.cp-col-hdr{display:grid;grid-template-columns:38px repeat(3,1fr);gap:2px;padding:5px 5px 0;background:var(--surface)}
-.cp-col-lbl{text-align:center;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding-bottom:2px}
-.cp-opp-side{display:grid;grid-template-columns:38px repeat(3,1fr);gap:2px;padding:2px 5px 0;background:var(--surface)}
-.cp-you-side{display:grid;grid-template-columns:38px 1fr;gap:2px;padding:0 5px 5px;background:var(--surface)}
-.cp-rlabel{display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding-right:5px;gap:3px;min-height:56px}
-.cp-rlabel-ref{min-height:28px}
-.cp-rlabel-text{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);line-height:1}
-.cp-dots-mini{display:flex;gap:3px;justify-content:flex-end}
-.cp-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block}
-.cp-dot.you{background:var(--accent);box-shadow:0 0 5px rgba(200,230,60,.7)}
-.cp-dot.opp{background:var(--opp);box-shadow:0 0 5px rgba(255,128,66,.7)}
-.cp-zone{padding:6px 3px;border:1.5px solid var(--border);border-radius:7px;text-align:center;background:var(--bg);min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .15s;position:relative;margin-bottom:2px}
-.cp-zone.clickable{cursor:pointer}
-.cp-zone.clickable:active{transform:scale(.96)}
-.cp-zone.grayed{opacity:0.25;cursor:default}
-.cp-zone.sel,.cp-zone.clickable:hover{border-color:var(--accent);background:rgba(200,230,60,.1)}
-.cp-zone-code{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--text);line-height:1}
-.cp-zone-pct{font-size:9px;font-weight:700;color:var(--muted);margin-top:3px;line-height:1.35;white-space:pre-line}
-.cp-net-wrap{padding:0 5px;background:var(--surface)}
-.cp-net{background:rgba(255,255,255,.07);border-top:2px solid rgba(255,255,255,.22);border-bottom:2px solid rgba(255,255,255,.22);padding:4px;text-align:center;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin:2px 0}
-.cp-ref-row{display:grid;grid-template-columns:38px 1fr;gap:2px;padding:0 5px;background:var(--surface)}
-.cp-ref-track{border:1px solid rgba(255,255,255,.06);border-radius:6px;background:var(--bg);height:26px;display:flex;align-items:center;padding:0 10px;justify-content:space-between;margin-bottom:2px}
-.cp-ref-track.you-here{border-color:rgba(200,230,60,.3);background:rgba(200,230,60,.05)}
-.cp-ref-rlabel{display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);height:26px;margin-bottom:2px}
-
-/* Shot choice panel (drive vs lob) */
-.shot-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.shot-btn{padding:18px 10px;border:1.5px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
-.shot-btn:active{transform:scale(.97)}
-.shot-icon{font-size:28px;margin-bottom:5px}
-.shot-name{font-size:13px;font-weight:700;letter-spacing:.5px}
-.shot-hint{font-size:10px;color:var(--muted);margin-top:2px}
-.shot-btn:hover,.shot-btn.sel{border-color:var(--accent);background:rgba(200,230,60,.08)}
-
-/* Make info & roll */
-.make-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.make-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+/* Cards */
+.make-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.make-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
 .make-lbl{font-size:11px;color:var(--muted);font-weight:600}
-.make-val{font-size:13px;font-weight:700}
-.make-val.p{color:var(--success)}
-.make-val.a{color:var(--warning)}
-.make-val.m{color:var(--danger)}
-.dice-wrap{text-align:center;margin:12px 0}
-.dice{display:inline-block;width:80px;height:80px;background:var(--card);border:2px solid var(--border);border-radius:16px;font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:80px;color:var(--text);transition:all .2s}
-.dice.rolling{animation:diceAnim .5s ease-out}
-@keyframes diceAnim{0%{transform:rotate(-15deg) scale(1.1)}30%{transform:rotate(10deg) scale(1.05)}60%{transform:rotate(-5deg)}100%{transform:rotate(0) scale(1)}}
-.roll-btn{width:100%;padding:18px;background:var(--accent);color:#0b1f14;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;cursor:pointer;transition:all .2s}
-.roll-btn:active{transform:scale(.98)}
+.make-val{font-size:12px;font-weight:700}
+.make-val.p{color:var(--success)}.make-val.a{color:var(--warning)}.make-val.m{color:var(--danger)}
+hr.div{border:none;border-top:1px solid var(--border);margin:3px 0}
 
-/* Outcome */
-.outcome-card{border-radius:14px;padding:18px;text-align:center;border:2px solid transparent}
+/* Dice */
+.dice-wrap{text-align:center;margin:10px 0}
+.dice{display:inline-block;width:72px;height:72px;background:var(--card);border:2px solid var(--border);border-radius:14px;font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:72px;color:var(--text)}
+.dice.rolling{animation:spin .5s ease-out}
+@keyframes spin{0%{transform:rotate(-15deg) scale(1.1)}30%{transform:rotate(10deg)}60%{transform:rotate(-4deg)}100%{transform:rotate(0) scale(1)}}
+
+/* Buttons */
+.roll-btn{width:100%;padding:16px;background:var(--accent);color:#0a1a10;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;cursor:pointer}
+.roll-btn:active{transform:scale(.98)}
+.continue-btn{width:100%;padding:13px;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;cursor:pointer;margin-top:4px}
+.continue-btn:active{transform:scale(.98)}
+.danger-btn{width:100%;padding:16px;background:var(--danger);color:white;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;cursor:pointer;margin-top:4px}
+.danger-btn:active{transform:scale(.98)}
+
+/* Outcomes */
+.outcome-card{border-radius:12px;padding:14px;text-align:center;border:2px solid transparent}
 .outcome-card.perfect{background:rgba(74,222,128,.1);border-color:var(--success)}
-.outcome-card.attackable{background:rgba(255,217,61,.1);border-color:var(--warning)}
+.outcome-card.attackable{background:rgba(255,215,61,.1);border-color:var(--warning)}
 .outcome-card.miss{background:rgba(255,107,107,.1);border-color:var(--danger)}
-.outcome-word{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;line-height:1}
+.outcome-word{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;line-height:1}
 .outcome-card.perfect .outcome-word{color:var(--success)}
 .outcome-card.attackable .outcome-word{color:var(--warning)}
 .outcome-card.miss .outcome-word{color:var(--danger)}
-.outcome-roll{font-size:12px;color:var(--muted);margin-top:4px}
-.outcome-desc{font-size:13px;color:var(--text);margin-top:10px;line-height:1.5}
+.outcome-roll{font-size:11px;color:var(--muted);margin-top:3px}
+.outcome-desc{font-size:12px;color:var(--text);margin-top:8px;line-height:1.5}
 
-/* Position update card */
-.pos-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:5px}
-.pos-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.pos-lbl{color:var(--muted)}
-.pos-val{font-weight:700}
+/* Serve card */
+.serve-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.serve-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:8px}
+.serve-line{font-size:11px;color:var(--muted);margin-bottom:4px;padding-left:10px;position:relative}
+.serve-line::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:8px;top:2px}
 
-/* Continue / action buttons */
-.continue-btn{width:100%;padding:16px;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:4px}
-.continue-btn:hover{border-color:var(--accent);color:var(--accent)}
-.continue-btn:active{transform:scale(.98)}
-.danger-btn{width:100%;padding:18px;background:var(--danger);color:white;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:4px}
-.danger-btn:active{transform:scale(.98)}
+/* Shot choice */
+.shot-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.shot-btn{padding:14px 8px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'Inter',sans-serif;cursor:pointer;text-align:center}
+.shot-btn:active{transform:scale(.97);border-color:var(--accent)}
+.shot-icon{font-size:22px;margin-bottom:3px}
+.shot-name{font-size:12px;font-weight:700}
+.shot-hint{font-size:10px;color:var(--muted);margin-top:2px}
 
-/* Alert box */
-.alert-box{border-radius:14px;padding:18px;border:2px solid var(--danger);background:rgba(255,107,107,.08);text-align:center}
-.alert-box.smash{border-color:var(--danger)}
-.alert-box.block{border-color:var(--warning)}
-.alert-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:6px}
+/* Alert */
+.alert-box{border-radius:12px;padding:14px;border:2px solid;text-align:center}
+.alert-box.smash{border-color:var(--danger);background:rgba(255,107,107,.08)}
+.alert-box.block{border-color:var(--warning);background:rgba(255,215,61,.08)}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:4px}
 .alert-box.smash .alert-title{color:var(--danger)}
 .alert-box.block .alert-title{color:var(--warning)}
-.alert-sub{font-size:12px;color:var(--muted)}
+.alert-sub{font-size:11px;color:var(--muted)}
 
-/* Point screen */
-.point-screen{text-align:center;padding:8px 0}
-.point-emoji{font-size:60px;margin-bottom:4px}
-.point-label{font-family:'Bebas Neue',sans-serif;font-size:50px;letter-spacing:4px;line-height:1;margin-bottom:6px}
-.point-label.you{color:var(--accent)}
-.point-label.opp{color:var(--danger)}
-.point-reason{font-size:12px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+/* Point */
+.point-screen{text-align:center;padding:4px 0}
+.point-emoji{font-size:48px;margin-bottom:2px}
+.point-label{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;line-height:1;margin-bottom:4px}
+.point-label.you{color:var(--accent)}.point-label.opp{color:var(--danger)}
+.point-reason{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5}
 
-/* Serve screen */
-.serve-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
-.serve-emoji{font-size:40px;margin-bottom:10px}
-.serve-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px}
-.serve-lines{display:flex;flex-direction:column;gap:6px;text-align:left;margin-top:12px}
-.serve-line{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
-.serve-dot{color:var(--accent);font-size:10px;margin-top:3px;flex-shrink:0}
+/* Court hint */
+.court-hint{text-align:center;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:6px 0}
 
-/* Rally log */
-.log-wrap{border-top:1px solid var(--border);padding:14px 20px}
-.log-toggle{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:0}
-.log-toggle-arrow{transition:transform .2s}
-.log-entries{display:none;margin-top:10px;display:flex;flex-direction:column;gap:3px}
-.log-entry{font-size:11px;color:var(--muted);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px}
-.log-n{min-width:18px;font-weight:700}
-.log-txt.p{color:var(--success)}
-.log-txt.a{color:var(--warning)}
-.log-txt.m{color:var(--danger)}
+/* Log */
+.log-wrap{background:var(--bg);border-top:1px solid var(--border);padding:8px 16px;flex-shrink:0;max-height:120px;overflow-y:auto}
+.log-toggle{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px}
+.log-entries{margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.log-entry{font-size:10px;color:var(--muted);padding:2px 0;display:flex;gap:6px;border-bottom:1px solid rgba(255,255,255,.03)}
+.log-n{min-width:16px;font-weight:700}
+.log-txt.p{color:var(--success)}.log-txt.a{color:var(--warning)}.log-txt.m{color:var(--danger)}
 
-/* Opponent thinking */
-.thinking{display:flex;align-items:center;gap:4px;justify-content:center;padding:8px;color:var(--muted);font-size:13px}
-.dot-anim span{opacity:0;animation:blink 1.2s infinite}
-.dot-anim span:nth-child(2){animation-delay:.2s}
-.dot-anim span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
-
-/* Game over */
-#screen-gameover{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
-.go-title{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:4px;color:var(--accent);margin-bottom:8px}
-.go-score{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);margin-bottom:8px}
-.go-msg{font-size:14px;color:var(--muted);margin-bottom:32px}
-.go-stats{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:320px;margin-bottom:28px;display:flex;flex-direction:column;gap:8px}
-.go-stat-row{display:flex;justify-content:space-between;font-size:13px}
-.go-stat-lbl{color:var(--muted)}
-.go-stat-val{font-weight:700}
-
-hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
+/* Gameover */
+#screen-gameover{min-height:100dvh;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.go-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:4px;color:var(--accent);margin-bottom:6px}
+.go-score{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);margin-bottom:6px}
+.go-msg{font-size:13px;color:var(--muted);margin-bottom:28px}
+.go-stats{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;width:100%;max-width:300px;margin-bottom:24px;display:flex;flex-direction:column;gap:7px}
+.go-stat-row{display:flex;justify-content:space-between;font-size:12px}
+.go-stat-lbl{color:var(--muted)}.go-stat-val{font-weight:700}
 </style>
 </head>
 <body>
@@ -212,76 +172,90 @@ hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
   <div class="logo-sub">Pickleball Mental Training</div>
   <div class="skill-label">Your Skill Level</div>
   <div class="skill-row">
-    <button class="skill-btn" data-skill="beginner" onclick="setSkill('beginner')">
-      <span class="skill-icon">🌱</span>Beginner
-    </button>
-    <button class="skill-btn active" data-skill="intermediate" onclick="setSkill('intermediate')">
-      <span class="skill-icon">🎯</span>Intermediate
-    </button>
-    <button class="skill-btn" data-skill="advanced" onclick="setSkill('advanced')">
-      <span class="skill-icon">🔥</span>Advanced
-    </button>
+    <button class="skill-btn" data-skill="beginner" onclick="setSkill('beginner')"><span class="skill-icon">🌱</span>Beginner</button>
+    <button class="skill-btn active" data-skill="intermediate" onclick="setSkill('intermediate')"><span class="skill-icon">🎯</span>Intermediate</button>
+    <button class="skill-btn" data-skill="advanced" onclick="setSkill('advanced')"><span class="skill-icon">🔥</span>Advanced</button>
   </div>
   <button class="btn-start" onclick="startGame()">START GAME</button>
 </div>
 
 <!-- GAME -->
 <div id="screen-game" style="display:none">
-  <!-- Score bar -->
   <div class="score-bar">
     <div class="score-side">
       <div class="score-who">You</div>
       <div class="score-num" id="score-you">0</div>
     </div>
     <div class="score-mid">
-      <div class="score-sep">–</div>
       <div class="rally-info" id="rally-info">Rally 1</div>
+      <div class="rush-badge" id="rush-badge">–</div>
     </div>
-    <div class="score-side">
-      <div class="score-who">Opponent</div>
-      <div class="score-num" id="score-opp">0</div>
-    </div>
-  </div>
-
-  <!-- Compact court position strip -->
-  <div class="court-wrap">
-    <div class="court-row">
-      <div class="court-side">
-        <div class="court-label">Opponent</div>
-        <div class="court-tiers">
-          <div class="tier-box" id="opp-D">D</div>
-          <div class="tier-box" id="opp-M">M</div>
-          <div class="tier-box" id="opp-K">K</div>
-        </div>
-      </div>
-      <div class="net-col">
-        <div class="net-line"></div>
-        <div class="net-txt">NET</div>
-        <div class="net-line"></div>
-      </div>
-      <div class="court-side">
-        <div class="court-label">You</div>
-        <div class="court-tiers">
-          <div class="tier-box" id="you-K">K</div>
-          <div class="tier-box" id="you-M">M</div>
-          <div class="tier-box" id="you-D">D</div>
-        </div>
-      </div>
-    </div>
-    <div class="rush-row">
-      <div class="rush-chip" id="rush-opp">Opp: –</div>
-      <div class="rush-chip" id="rush-you">You: –</div>
+    <div class="score-side" style="text-align:right">
+      <div class="score-who">Opp</div>
+      <div class="score-num score-opp-num" id="score-opp">0</div>
     </div>
   </div>
 
-  <!-- Dynamic content -->
-  <div class="game-content" id="game-content"></div>
+  <!-- COURT SVG -->
+  <div id="court-wrap">
+    <svg id="court-svg" viewBox="0 0 320 430" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#14507e"/>
+          <stop offset="100%" stop-color="#1a7abf"/>
+        </linearGradient>
+        <linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a7abf"/>
+          <stop offset="100%" stop-color="#1560a0"/>
+        </linearGradient>
+      </defs>
+      <!-- Surround -->
+      <rect width="320" height="430" fill="#246b33"/>
+      <!-- Court surface - opp side (slightly different shade) -->
+      <rect x="30" y="20" width="260" height="195" fill="url(#cg)"/>
+      <!-- Court surface - player side -->
+      <rect x="30" y="215" width="260" height="195" fill="url(#cg2)"/>
+      <!-- Outer court lines -->
+      <rect x="30" y="20" width="260" height="390" fill="none" stroke="white" stroke-width="2.5"/>
+      <!-- Opp kitchen line -->
+      <line x1="30" y1="153" x2="290" y2="153" stroke="white" stroke-width="2"/>
+      <!-- Player kitchen line -->
+      <line x1="30" y1="277" x2="290" y2="277" stroke="white" stroke-width="2"/>
+      <!-- Center service line -->
+      <line x1="160" y1="153" x2="160" y2="277" stroke="white" stroke-width="1.5"/>
+      <!-- Zone dividers on opp side (dashed guide lines) -->
+      <line x1="30" y1="85" x2="290" y2="85" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <line x1="30" y1="150" x2="290" y2="150" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <line x1="117" y1="20" x2="117" y2="215" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <line x1="203" y1="20" x2="203" y2="215" stroke="rgba(255,255,255,0.22)" stroke-width="0.75" stroke-dasharray="4,4"/>
+      <!-- Net posts -->
+      <rect x="22" y="204" width="8" height="22" fill="#7a7a7a" rx="2"/>
+      <rect x="290" y="204" width="8" height="22" fill="#7a7a7a" rx="2"/>
+      <!-- Net body -->
+      <rect x="30" y="210" width="260" height="10" fill="#a0a0a0" rx="1"/>
+      <!-- Net crosshatch lines -->
+      <line x1="30" y1="212" x2="290" y2="212" stroke="rgba(255,255,255,.2)" stroke-width="0.5"/>
+      <line x1="30" y1="215" x2="290" y2="215" stroke="rgba(255,255,255,.2)" stroke-width="0.5"/>
+      <line x1="30" y1="218" x2="290" y2="218" stroke="rgba(255,255,255,.2)" stroke-width="0.5"/>
+      <!-- Net top white tape -->
+      <rect x="30" y="210" width="260" height="2" fill="white"/>
+      <!-- Center strap -->
+      <rect x="158" y="210" width="4" height="10" fill="#888"/>
+      <!-- Labels -->
+      <text x="160" y="13" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="7" font-family="Inter,sans-serif" font-weight="700" letter-spacing="2">OPPONENT</text>
+      <text x="160" y="424" text-anchor="middle" fill="rgba(200,230,60,0.45)" font-size="7" font-family="Inter,sans-serif" font-weight="700" letter-spacing="2">YOU</text>
+      <!-- Dynamic layer (zones + dots) -->
+      <g id="court-dynamic"></g>
+    </svg>
+  </div>
 
-  <!-- Rally log -->
+  <!-- Action panel -->
+  <div id="action-panel"></div>
+
+  <!-- Log -->
   <div class="log-wrap">
     <div class="log-toggle" onclick="toggleLog()">
-      <span class="log-toggle-arrow" id="log-arrow">▶</span>
-      RALLY LOG
+      <span id="log-arrow">▶</span> RALLY LOG
     </div>
     <div class="log-entries" id="log-entries" style="display:none"></div>
   </div>
@@ -298,7 +272,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:2px 0}
 </div>
 
 <script>
-// ── MAKE TABLES ─────────────────────────────────────────────────────────────
+// ── MAKE TABLES ──────────────────────────────────────────────────────────────
 const TABLES = {
   drop:{
     D:{CK:{c:{m:8,p:4},s:{m:5,p:2}},side:{c:{m:6,p:3},s:{m:4,p:2}}},
@@ -314,662 +288,408 @@ const TABLES = {
     CD:{c:{m:8,p:4},s:{m:6,p:2}},
     side:{c:{m:7,p:4},s:{m:5,p:2}},
   },
-  block:{
-    D:{m:6,p:3},
-    M:{m:4,p:2},
-    K:null,
-  }
+  block:{D:{m:6,p:3},M:{m:4,p:2},K:null}
 };
 
-function getMakeInfo(shot, pos, target, rush, skillLevel) {
-  const r = rush === 'stretched' ? 's' : 'c';
+function getMakeInfo(shot,pos,target,rush,skill){
+  const r=rush==='stretched'?'s':'c';
   let base;
-  if (shot === 'drop') {
-    const tType = target === 'CK' ? 'CK' : 'side';
-    base = TABLES.drop[pos][tType][r];
-  } else if (shot === 'drive') {
-    base = TABLES.drive[pos][r];
-  } else {
-    const tType = target === 'CD' ? 'CD' : 'side';
-    base = TABLES.lob[tType][r];
-  }
-  const splits = {beginner:0.33, intermediate:0.50, advanced:0.67};
-  const split = splits[skillLevel || 'intermediate'];
-  const perfectMax = Math.max(1, Math.round(base.m * split));
-  return {makeNum:base.m, perfectMax, attackableMin:perfectMax+1, attackableMax:base.m};
+  if(shot==='drop'){base=TABLES.drop[pos][target==='CK'?'CK':'side'][r];}
+  else if(shot==='drive'){base=TABLES.drive[pos][r];}
+  else{base=TABLES.lob[target==='CD'?'CD':'side'][r];}
+  const splits={beginner:.33,intermediate:.5,advanced:.67};
+  const pm=Math.max(1,Math.round(base.m*(splits[skill||'intermediate'])));
+  return{makeNum:base.m,perfectMax:pm,attackableMin:pm+1,attackableMax:base.m};
 }
 
-// ── HELPERS ─────────────────────────────────────────────────────────────────
-const TIER = {K:0, M:1, D:2};
-function rollD12(){ return Math.floor(Math.random()*12)+1; }
-function resolveRoll(roll, makeNum, perfectMax){
-  if(roll > makeNum) return 'miss';
-  if(roll <= perfectMax) return 'perfect';
-  return 'attackable';
-}
-function getContactPos(target){
-  if(['LK','CK','RK'].includes(target)) return 'K';
-  if(['LM','CM','RM'].includes(target)) return 'M';
-  return 'D';
-}
-function getRush(fromPos, toPos){
-  return Math.abs(TIER[fromPos]-TIER[toPos]) >= 2 ? 'stretched' : 'comfortable';
-}
-function tierLabel(pos){ return pos==='K'?'Kitchen':pos==='M'?'Mid':'Deep'; }
-function shotLabel(shot){ return shot==='drive'?'Drive':shot==='drop'?'Drop':shot==='dink'?'Dink':'Lob'; }
+// ── ZONE COORDS (opponent's side, viewBox 320×430) ───────────────────────────
+const ZONE_COORDS={
+  LD:{x:30,y:20,w:87,h:65},CD:{x:117,y:20,w:86,h:65},RD:{x:203,y:20,w:87,h:65},
+  LM:{x:30,y:85,w:87,h:65},CM:{x:117,y:85,w:86,h:65},RM:{x:203,y:85,w:87,h:65},
+  LK:{x:30,y:150,w:87,h:65},CK:{x:117,y:150,w:86,h:65},RK:{x:203,y:150,w:87,h:65},
+};
+// Dot Y centers by tier
+const DOT_Y={
+  opp:{D:52,M:117,K:182},
+  you:{K:246,M:323,D:376}
+};
 
-function hitterNewPos(shot, outcome, contactPos){
-  if(outcome==='miss') return contactPos;
-  if(outcome==='attackable') return contactPos;
-  if(shot==='drop'||shot==='dink') return 'K';
-  if(shot==='drive') return contactPos==='D' ? 'M' : contactPos;
-  if(shot==='lob') return contactPos;
-  return contactPos;
-}
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+const TIER={K:0,M:1,D:2};
+function rollD12(){return Math.floor(Math.random()*12)+1;}
+function resolveRoll(roll,makeNum,pm){if(roll>makeNum)return'miss';if(roll<=pm)return'perfect';return'attackable';}
+function getContactPos(t){if(['LK','CK','RK'].includes(t))return'K';if(['LM','CM','RM'].includes(t))return'M';return'D';}
+function getRush(f,t){return Math.abs(TIER[f]-TIER[t])>=2?'stretched':'comfortable';}
+function tierLabel(p){return p==='K'?'Kitchen':p==='M'?'Mid':'Deep';}
+function shotLabel(s){return s==='drive'?'Drive':s==='drop'||s==='dink'?'Drop':'Lob';}
+function pct(shot,pos,target,rush,skill){return Math.round(getMakeInfo(shot,pos,target,rush,skill).makeNum/12*100);}
 
-// ── OPPONENT AI ─────────────────────────────────────────────────────────────
-function oppChooseShot(oppPos){
-  const r = Math.random();
-  if(oppPos==='K')  return r<.75?'drop':'drive';
-  if(oppPos==='M')  return r<.50?'drop':r<.80?'drive':'lob';
-  return r<.55?'drop':r<.82?'drive':'lob';
-}
-function oppChooseTarget(shot, oppPos, playerPos){
-  if(shot==='drop'){
-    if(playerPos==='K') return 'CK';
-    return Math.random()<.5?'CK':(Math.random()<.5?'LK':'RK');
-  }
-  if(shot==='lob') return Math.random()<.5?'LD':'RD';
-  const t=['LD','CD','RD']; return t[Math.floor(Math.random()*t.length)];
-}
+// ── OPPONENT AI ──────────────────────────────────────────────────────────────
+function oppChooseShot(p){const r=Math.random();if(p==='K')return r<.75?'drop':'drive';if(p==='M')return r<.5?'drop':r<.8?'drive':'lob';return r<.55?'drop':r<.82?'drive':'lob';}
+function oppChooseTarget(shot,oPos,pPos){if(shot==='drop'){if(pPos==='K')return'CK';return Math.random()<.5?'CK':Math.random()<.5?'LK':'RK';}if(shot==='lob')return Math.random()<.5?'LD':'RD';const t=['LD','CD','RD'];return t[Math.floor(Math.random()*t.length)];}
 
-// ── GAME STATE ───────────────────────────────────────────────────────────────
-let G = {};
-let sessionLog = [];
+// ── STATE ────────────────────────────────────────────────────────────────────
+let G={},sessionLog=[];
 
 function startGame(){
-  G = {
-    playerScore: 0, oppScore: 0,
-    skillLevel: document.querySelector('.skill-btn.active')?.dataset.skill || 'intermediate',
-    playerServing: true,
-    serveRoll: null, serveMakeInfo: null, serveTarget: null,
-    playerPos: 'D', oppPos: 'D',
-    playerRush: 'comfortable', oppRush: 'comfortable',
-    nextPlayerComfortable: false, nextOppComfortable: false,
-    rallyNum: 1, rallyShot: 0,
-    phase: 'serve',
-    selectedShot: null, selectedTarget: null, selectedZone: null,
-    lastRoll: null, lastOutcome: null, lastMakeInfo: null,
-    pendingAttackable: null,
-    shotActor: 'player',
-    smashRoll: null, smashOutcome: null,
-    blockRoll: null, blockOutcome: null,
-    pointWinner: null, pointReason: '',
-    totalShots: 0, totalPerfect: 0, totalAttackable: 0, totalMiss: 0,
-    _serveReturn: false,
+  G={
+    playerScore:0,oppScore:0,
+    skillLevel:document.querySelector('.skill-btn.active')?.dataset.skill||'intermediate',
+    playerServing:true,
+    serveRoll:null,serveMakeInfo:null,serveTarget:null,
+    playerPos:'D',oppPos:'D',
+    playerRush:'comfortable',oppRush:'comfortable',
+    nextPlayerComfortable:false,nextOppComfortable:false,
+    rallyNum:1,rallyShot:0,
+    phase:'serve',
+    selectedShot:null,selectedTarget:null,selectedZone:null,
+    lastRoll:null,lastOutcome:null,lastMakeInfo:null,
+    _serveReturn:false,
+    smashRoll:null,smashOutcome:null,blockRoll:null,blockOutcome:null,
+    pointWinner:null,pointReason:'',
+    totalShots:0,totalPerfect:0,totalAttackable:0,totalMiss:0,
   };
-  sessionLog = [];
-  document.getElementById('screen-setup').style.display = 'none';
-  document.getElementById('screen-game').style.display = 'flex';
+  sessionLog=[];
+  document.getElementById('screen-setup').style.display='none';
+  document.getElementById('screen-game').style.display='flex';
   render();
 }
+function setSkill(s){document.querySelectorAll('.skill-btn').forEach(b=>b.classList.toggle('active',b.dataset.skill===s));}
 
-function setSkill(s){
-  document.querySelectorAll('.skill-btn').forEach(b=>b.classList.toggle('active',b.dataset.skill===s));
+// ── COURT SVG UPDATER ────────────────────────────────────────────────────────
+function updateCourtSVG(){
+  const g=document.getElementById('court-dynamic');
+  if(!g)return;
+  const pp=G.playerPos,op=G.oppPos,rush=G.playerRush,skill=G.skillLevel;
+  const fromK=pp==='K';
+  const midActive=op==='M'&&!fromK;
+  const showZones=['player-zone','player-shot-for-zone','player-serve-return'].includes(G.phase)||
+    (G.phase==='serve'&&G.playerServing&&!G.serveRoll);
+  const servePickMode=G.phase==='serve'&&G.playerServing&&!G.serveTarget;
+
+  let html='';
+
+  // Zone overlays
+  for(const[code,c]of Object.entries(ZONE_COORDS)){
+    const isKit=['LK','CK','RK'].includes(code);
+    const isMid=['LM','CM','RM'].includes(code);
+    const isDeep=!isKit&&!isMid;
+    const isSel=G.selectedZone===code||(servePickMode&&G.serveTarget===code);
+
+    let active=false,label='',pctLine='';
+
+    if(servePickMode){
+      // During serve target pick: only deep zones tappable
+      active=isDeep;
+      if(active){label=code;pctLine='SERVE HERE';}
+    } else if(showZones){
+      if(isKit){active=true;}
+      else if(isDeep){active=true;}
+      else if(isMid){active=midActive;}
+
+      if(active){
+        if(isKit){
+          const p=pct('drop',pp,code,rush,skill);
+          label=code;pctLine=(fromK?'DINK ':'DROP ')+p+'%';
+        } else if(isMid){
+          const p=pct('drive',pp,code,rush,skill);
+          label=code;pctLine='FEET '+p+'%';
+        } else {
+          if(fromK){
+            const p=pct('lob',pp,code,rush,skill);
+            label=code;pctLine='LOB '+p+'%';
+          } else {
+            const dp=pct('drive',pp,code,rush,skill);
+            const lp=pct('lob',pp,code,rush,skill);
+            label=code;pctLine='D:'+dp+'% L:'+lp+'%';
+          }
+        }
+      }
+    }
+
+    const fill=isSel?'rgba(200,230,60,0.5)':active?'rgba(200,230,60,0.15)':'rgba(0,0,0,0)';
+    const stroke=isSel?'rgba(200,230,60,0.9)':active?'rgba(200,230,60,0.45)':'rgba(0,0,0,0)';
+    const onclick=active?`onclick="${servePickMode?'pickServeTarget':'tapZone'}('${code}')"`:'';
+    const cursor=active?'pointer':'default';
+
+    html+=`<rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" fill="${fill}" stroke="${stroke}" stroke-width="1.5" rx="3" style="cursor:${cursor}" ${onclick}/>`;
+
+    if(label){
+      const cx=c.x+c.w/2,cy=c.y+c.h/2;
+      html+=`<text x="${cx}" y="${cy-5}" text-anchor="middle" fill="white" font-size="9" font-family="Inter,sans-serif" font-weight="700" pointer-events="none" opacity="0.85">${label}</text>`;
+      if(pctLine)html+=`<text x="${cx}" y="${cy+8}" text-anchor="middle" fill="white" font-size="8" font-family="Inter,sans-serif" font-weight="600" pointer-events="none" opacity="0.7">${pctLine}</text>`;
+    } else if(!active&&!showZones){
+      // Always show faint zone codes
+      const cx=c.x+c.w/2,cy=c.y+c.h/2;
+      html+=`<text x="${cx}" y="${cy+4}" text-anchor="middle" fill="white" font-size="8" font-family="Inter,sans-serif" pointer-events="none" opacity="0.12">${code}</text>`;
+    }
+  }
+
+  // Opponent dots (orange)
+  const oy=DOT_Y.opp[op]||117;
+  html+=`<circle cx="90" cy="${oy}" r="8" fill="${op==='K'?'#ff4444':op==='D'?'#ff8042':'#ff8042'}" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
+  html+=`<circle cx="230" cy="${oy}" r="8" fill="${op==='K'?'#ff4444':'#ff8042'}" stroke="rgba(255,128,66,0.35)" stroke-width="4" pointer-events="none"/>`;
+
+  // Player dots (lime)
+  const yy=DOT_Y.you[pp]||323;
+  html+=`<circle cx="90" cy="${yy}" r="8" fill="#c8e63c" stroke="rgba(200,230,60,0.35)" stroke-width="4" pointer-events="none"/>`;
+  html+=`<circle cx="230" cy="${yy}" r="8" fill="#c8e63c" stroke="rgba(200,230,60,0.35)" stroke-width="4" pointer-events="none"/>`;
+
+  g.innerHTML=html;
 }
 
 // ── RENDER ───────────────────────────────────────────────────────────────────
 function render(){
   updateScoreBar();
-  updateCourt();
-  const c = document.getElementById('game-content');
-  c.innerHTML = '';
+  updateCourtSVG();
+  const panel=document.getElementById('action-panel');
+  panel.innerHTML='';
 
-  if(G.phase==='serve')                    c.innerHTML = renderServe();
-  else if(G.phase==='opp-serve-return')    c.innerHTML = renderOppServeReturn();
-  else if(G.phase==='player-serve-return') { G._serveReturn=true; c.innerHTML = renderCourtPicker(); }
-  else if(G.phase==='player-serve-return-roll') c.innerHTML = renderPlayerServeReturnRoll();
-  else if(G.phase==='player-zone')         c.innerHTML = renderCourtPicker();
-  else if(G.phase==='player-shot-for-zone') c.innerHTML = renderPlayerShotForZone();
-  else if(G.phase==='player-roll')         c.innerHTML = renderPlayerRoll();
-  else if(G.phase==='player-outcome')      c.innerHTML = renderPlayerOutcome();
-  else if(G.phase==='opp-turn')            c.innerHTML = renderOppTurn();
-  else if(G.phase==='player-smash')        c.innerHTML = renderPlayerSmash();
-  else if(G.phase==='opp-smash')           c.innerHTML = renderOppSmash();
-  else if(G.phase==='player-block')        c.innerHTML = renderPlayerBlock();
-  else if(G.phase==='opp-block')           c.innerHTML = renderOppBlock();
-  else if(G.phase==='point')               c.innerHTML = renderPoint();
+  if(G.phase==='serve')                         panel.innerHTML=renderServe();
+  else if(G.phase==='opp-serve-return')         panel.innerHTML=renderOppServeReturn();
+  else if(G.phase==='player-serve-return')      {G._serveReturn=true;panel.innerHTML=renderCourtHint();}
+  else if(G.phase==='player-serve-return-roll') panel.innerHTML=renderPlayerRoll();
+  else if(G.phase==='player-zone')              panel.innerHTML=renderCourtHint();
+  else if(G.phase==='player-shot-for-zone')     panel.innerHTML=renderShotForZone();
+  else if(G.phase==='player-roll')              panel.innerHTML=renderPlayerRoll();
+  else if(G.phase==='player-outcome')           panel.innerHTML=renderPlayerOutcome();
+  else if(G.phase==='opp-turn')                 panel.innerHTML=renderOppTurn();
+  else if(G.phase==='player-smash')             panel.innerHTML=renderPlayerSmash();
+  else if(G.phase==='opp-smash')                panel.innerHTML=renderOppSmash();
+  else if(G.phase==='player-block')             panel.innerHTML=renderPlayerBlock();
+  else if(G.phase==='opp-block')                panel.innerHTML=renderOppBlock();
+  else if(G.phase==='point')                    panel.innerHTML=renderPoint();
 }
 
 function updateScoreBar(){
-  const py = document.getElementById('score-you');
-  const po = document.getElementById('score-opp');
-  py.textContent = G.playerScore;
-  po.textContent = G.oppScore;
-  py.className = 'score-num'+(G.playerScore>G.oppScore?' lead':'');
-  po.className = 'score-num'+(G.oppScore>G.playerScore?' lead':'');
-  document.getElementById('rally-info').textContent = `Rally ${G.rallyNum} · Shot ${G.rallyShot}`;
-}
-
-function updateCourt(){
-  ['K','M','D'].forEach(t=>{
-    document.getElementById(`you-${t}`).className='tier-box'+(G.playerPos===t?' you-here':'');
-    document.getElementById(`opp-${t}`).className='tier-box'+(G.oppPos===t?' opp-here':'');
-  });
-  const ru = document.getElementById('rush-you');
-  const ro = document.getElementById('rush-opp');
-  const yr = G.playerRush||'comfortable';
-  const or_ = G.oppRush||'comfortable';
-  ru.textContent=`You: ${yr==='stretched'?'Stretched':'Comfortable'}`;
-  ru.className=`rush-chip ${yr}`;
-  ro.textContent=`Opp: ${or_==='stretched'?'Stretched':'Comfortable'}`;
-  ro.className=`rush-chip ${or_}`;
-}
-
-// ── INTERACTIVE COURT PICKER ──────────────────────────────────────────────────
-
-function courtPickerHTML(){
-  const pp = G.playerPos, op = G.oppPos;
-  const rush = G.playerRush;
-  const skill = G.skillLevel;
-  const fromK = pp === 'K';
-  // Mid zones only available when opp is at M and player isn't at K (can't drive from K)
-  const midActive = op === 'M' && !fromK;
-  const dropLabel = fromK ? 'DINK' : 'DROP';
-
-  function pct(shot, target){
-    return Math.round(getMakeInfo(shot, pp, target, rush, skill).makeNum / 12 * 100);
-  }
-
-  function zoneCell(code, rowType){
-    const isSel = G.selectedZone === code;
-    let pctText = '', clickable = false;
-
-    if(rowType === 'kit'){
-      pctText = `${dropLabel}\n${pct('drop', code)}%`;
-      clickable = true;
-    } else if(rowType === 'deep'){
-      if(fromK){
-        // From kitchen, only lob to deep (smash is attack-mode only)
-        pctText = `LOB\n${pct('lob', code)}%`;
-      } else {
-        pctText = `D:${pct('drive', code)}%\nL:${pct('lob', code)}%`;
-      }
-      clickable = true;
-    } else { // mid
-      if(midActive){
-        pctText = `FEET\n${pct('drive', code)}%`;
-        clickable = true;
-      } else {
-        pctText = '—';
-      }
-    }
-
-    const cls = `cp-zone${clickable?' clickable':'  grayed'}${isSel?' sel':''}`;
-    const onclick = clickable ? `onclick="tapZone('${code}')"` : '';
-    return `<div class="${cls}" ${onclick}>
-      <div class="cp-zone-code">${code}</div>
-      <div class="cp-zone-pct">${pctText}</div>
-    </div>`;
-  }
-
-  function rlabel(text, team, tierPos){
-    const pos = team === 'opp' ? op : pp;
-    const hasDots = pos === tierPos;
-    const dotCls = team === 'opp' ? 'opp' : 'you';
-    return `<div class="cp-rlabel">
-      <span class="cp-rlabel-text">${text}</span>
-      ${hasDots ? `<div class="cp-dots-mini"><span class="cp-dot ${dotCls}"></span><span class="cp-dot ${dotCls}"></span></div>` : ''}
-    </div>`;
-  }
-
-  function refRow(tierLabel, tierPos){
-    const active = pp === tierPos;
-    return `
-    <div class="cp-ref-row">
-      <div class="cp-ref-rlabel">${tierLabel}</div>
-      <div class="cp-ref-track${active?' you-here':''}">
-        ${active ? `<span class="cp-dot you"></span><span class="cp-dot you"></span>` : ''}
-      </div>
-    </div>`;
-  }
-
-  return `<div class="cp-wrap">
-    <!-- Column labels -->
-    <div class="cp-col-hdr">
-      <div></div>
-      <div class="cp-col-lbl">Left</div>
-      <div class="cp-col-lbl">Center</div>
-      <div class="cp-col-lbl">Right</div>
-    </div>
-    <!-- Opponent side (tappable) -->
-    <div class="cp-opp-side">
-      ${rlabel('Deep','opp','D')}
-      ${zoneCell('LD','deep')}${zoneCell('CD','deep')}${zoneCell('RD','deep')}
-      ${rlabel('Mid','opp','M')}
-      ${zoneCell('LM','mid')}${zoneCell('CM','mid')}${zoneCell('RM','mid')}
-      ${rlabel('Kit','opp','K')}
-      ${zoneCell('LK','kit')}${zoneCell('CK','kit')}${zoneCell('RK','kit')}
-    </div>
-    <!-- Net -->
-    <div class="cp-net-wrap"><div class="cp-net">NET</div></div>
-    <!-- Your side (reference — dots show your position) -->
-    ${refRow('K','K')}
-    ${refRow('M','M')}
-    ${refRow('D','D')}
-  </div>`;
-}
-
-function renderCourtPicker(){
-  const isSR = G._serveReturn;
-  const title = isSR ? 'RETURN THE SERVE' : 'YOUR SHOT';
-  const sub = isSR
-    ? 'At Deep · Tap the court where you want to place it'
-    : `From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'} · Tap a zone to aim`;
-  return `
-  <div>
-    <div class="phase-title">${title}</div>
-    <div class="phase-sub">${sub}</div>
-  </div>
-  ${courtPickerHTML()}`;
-}
-
-function renderPlayerShotForZone(){
-  const zone = G.selectedTarget;
-  const rush = G.playerRush;
-  const driveMi = getMakeInfo('drive', G.playerPos, zone, rush, G.skillLevel);
-  const lobMi   = getMakeInfo('lob',   G.playerPos, zone, rush, G.skillLevel);
-  const dp = Math.round(driveMi.makeNum/12*100);
-  const lp = Math.round(lobMi.makeNum/12*100);
-  return `
-  <div>
-    <div class="phase-title">→ ${zone}</div>
-    <div class="phase-sub">How do you get it there?</div>
-  </div>
-  ${courtPickerHTML()}
-  <div class="shot-choice-grid" style="margin-top:10px">
-    <button class="shot-btn" onclick="selectShotForZone('drive')">
-      <div class="shot-icon">💨</div>
-      <div class="shot-name">DRIVE</div>
-      <div class="shot-hint">${dp}% make · Flat & fast</div>
-    </button>
-    <button class="shot-btn" onclick="selectShotForZone('lob')">
-      <div class="shot-icon">🌙</div>
-      <div class="shot-name">LOB</div>
-      <div class="shot-hint">${lp}% make · Push them back</div>
-    </button>
-  </div>
-  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">← Change Zone</button>`;
-}
-
-function tapZone(zone){
-  G.selectedZone  = zone;
-  G.selectedTarget = zone;
-
-  const contactPos = getContactPos(zone);
-  const baseRush   = getRush(G.playerPos, contactPos);
-  const rush       = G.nextPlayerComfortable ? 'comfortable' : baseRush;
-  G.playerRush     = rush;
-  G.nextPlayerComfortable = false;
-
-  const isKit  = ['LK','CK','RK'].includes(zone);
-  const isMid  = ['LM','CM','RM'].includes(zone);
-  const isDeep = !isKit && !isMid;
-
-  if(isKit){
-    // Drop or Dink — no further choice needed
-    G.selectedShot  = G.playerPos === 'K' ? 'dink' : 'drop';
-    G.lastMakeInfo  = getMakeInfo('drop', G.playerPos, zone, rush, G.skillLevel);
-    G.lastRoll      = null;
-    G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
-    render();
-  } else if(isMid){
-    // Feet shot — Drive only (only available when opp at M and player not at K)
-    G.selectedShot  = 'drive';
-    G.lastMakeInfo  = getMakeInfo('drive', G.playerPos, zone, rush, G.skillLevel);
-    G.lastRoll      = null;
-    G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
-    render();
-  } else {
-    // Deep zone: from K = lob only; from D or M = choose Drive or Lob
-    if(G.playerPos === 'K'){
-      G.selectedShot  = 'lob';
-      G.lastMakeInfo  = getMakeInfo('lob', G.playerPos, zone, rush, G.skillLevel);
-      G.lastRoll      = null;
-      G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
-      render();
-    } else {
-      G.phase = 'player-shot-for-zone';
-      render();
-    }
-  }
-}
-
-function selectShotForZone(shot){
-  G.selectedShot = shot;
-  G.lastMakeInfo = getMakeInfo(shot, G.playerPos, G.selectedTarget, G.playerRush, G.skillLevel);
-  G.lastRoll     = null;
-  G.phase = G._serveReturn ? 'player-serve-return-roll' : 'player-roll';
-  render();
+  const py=document.getElementById('score-you'),po=document.getElementById('score-opp');
+  py.textContent=G.playerScore; po.textContent=G.oppScore;
+  py.className='score-num'+(G.playerScore>G.oppScore?' lead':'');
+  po.className='score-num score-opp-num'+(G.oppScore>G.playerScore?' lead':'');
+  document.getElementById('rally-info').textContent=`Rally ${G.rallyNum} · Shot ${G.rallyShot}`;
+  const rb=document.getElementById('rush-badge');
+  const rush=G.playerRush||'comfortable';
+  rb.textContent=rush==='stretched'?'⚠ Stretched':'✓ Comfortable';
+  rb.className='rush-badge '+rush;
 }
 
 // ── RENDER PHASES ────────────────────────────────────────────────────────────
 
-function renderServe(){
-  const serving = G.playerServing;
-  const mi  = getMakeInfo('drive', 'D', 'CD', 'comfortable', G.skillLevel);
-  const roll = G.serveRoll;
-  const rolled = roll !== null;
-  return `
-  <div class="serve-card">
-    <div class="serve-emoji">${serving?'🏓':'⚡'}</div>
-    <div class="serve-title">${serving?'YOUR SERVE':'OPPONENT SERVES'}</div>
-    <div class="serve-lines">
-      <div class="serve-line"><span class="serve-dot">▸</span>Both teams start at Deep (D)</div>
-      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'Serve is a Forehand Drive from Deep — pick target, then roll':'Opponent serves a Forehand Drive from Deep'}</div>
-      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'If it lands: opponent returns from Deep, then advances to Kitchen':'If it lands: you must return from Deep, then advance to Kitchen'}</div>
-    </div>
-  </div>
-  ${serving ? `
-  ${!G.serveTarget ? `
-  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">PICK YOUR SERVE TARGET</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-    ${['LD','CD','RD'].map(t=>`<button class="shot-btn" onclick="pickServeTarget('${t}')">
-      <div class="shot-name">${t}</div>
-      <div class="shot-hint">${t==='LD'?'Left Deep':t==='CD'?'Center Deep':'Right Deep'}</div>
-    </button>`).join('')}
-  </div>` : `
-  <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Forehand Drive → ${G.serveTarget}</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
-    <hr class="div">
-    <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${mi.perfectMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${mi.attackableMin}–${mi.attackableMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Fault</span><span class="make-val m">${mi.makeNum+1}–12</span></div>
-  </div>
-  <div class="dice-wrap"><div class="dice" id="serve-dice">${rolled?roll:'?'}</div></div>
-  ${rolled?'':`<button class="roll-btn" onclick="rollServe()">ROLL SERVE</button>`}
-  ${rolled?`<button class="continue-btn" onclick="resolveServe()">SEE RESULT →</button>`:''}
-  <button class="continue-btn" style="margin-top:6px" onclick="G.serveTarget=null;render()">← Change Target</button>
-  `}` : `<button class="continue-btn" onclick="rollOppServe()">OPPONENT SERVES →</button>`}`;
+function renderCourtHint(){
+  const isSR=G._serveReturn;
+  const fromDesc=`From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'Stretched':'Comfortable'}`;
+  return `<div class="court-hint">${isSR?'RETURN FROM DEEP — TAP WHERE':'TAP WHERE YOU WANT IT TO GO'}</div>
+  <div class="phase-sub" style="text-align:center;padding:0 0 4px">${isSR?'After return you advance to Kitchen':fromDesc}</div>`;
 }
 
-function pickServeTarget(target){
-  G.serveTarget = target;
-  render();
+function renderServe(){
+  if(G.playerServing){
+    if(!G.serveTarget){
+      return `<div class="serve-card">
+        <div class="serve-title">YOUR SERVE</div>
+        <div class="serve-line">Both teams at Deep · Tap court above to pick serve direction</div>
+      </div>`;
+    }
+    const mi=getMakeInfo('drive','D',G.serveTarget,'comfortable',G.skillLevel);
+    const rolled=G.serveRoll!==null;
+    return `<div class="make-card">
+      <div class="make-row"><span class="make-lbl">Serve → ${G.serveTarget}</span><span class="make-val">${mi.makeNum}/12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
+      <hr class="div">
+      <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${mi.perfectMax}</span></div>
+      <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${mi.attackableMin}–${mi.attackableMax}</span></div>
+      <div class="make-row"><span class="make-lbl">Fault</span><span class="make-val m">${mi.makeNum+1}–12</span></div>
+    </div>
+    <div class="dice-wrap"><div class="dice" id="serve-dice">${rolled?G.serveRoll:'?'}</div></div>
+    ${rolled?`<button class="roll-btn" style="background:var(--success);color:#0a1a10" onclick="resolveServe()">SEE RESULT →</button>`:`<button class="roll-btn" onclick="rollServe()">ROLL SERVE</button>`}
+    <button class="continue-btn" onclick="G.serveTarget=null;G.serveRoll=null;render()">← Change Target</button>`;
+  }
+  return `<div class="serve-card">
+    <div class="serve-title">OPPONENT SERVES</div>
+    <div class="serve-line">Both teams at Deep</div>
+    <div class="serve-line">Return from Deep then advance to Kitchen</div>
+  </div>
+  <button class="roll-btn" onclick="rollOppServe()">OPPONENT SERVES →</button>`;
 }
+
+function pickServeTarget(target){G.serveTarget=target;render();}
 
 function rollServe(){
-  const mi = getMakeInfo('drive','D',G.serveTarget||'CD','comfortable',G.skillLevel);
-  G.serveRoll     = rollD12();
-  G.serveMakeInfo = mi;
-  G.totalShots++;
-  const d = document.getElementById('serve-dice');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=G.serveRoll; d.classList.remove('rolling'); },300); }
+  const mi=getMakeInfo('drive','D',G.serveTarget||'CD','comfortable',G.skillLevel);
+  G.serveRoll=rollD12(); G.serveMakeInfo=mi; G.totalShots++;
+  const d=document.getElementById('serve-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=G.serveRoll;d.classList.remove('rolling');},300);}
   render();
 }
 
 function resolveServe(){
-  const mi = G.serveMakeInfo;
-  const outcome = resolveRoll(G.serveRoll, mi.makeNum, mi.perfectMax);
-  if(outcome==='perfect') G.totalPerfect++;
-  else if(outcome==='attackable') G.totalAttackable++;
-  else G.totalMiss++;
+  const mi=G.serveMakeInfo;
+  const outcome=resolveRoll(G.serveRoll,mi.makeNum,mi.perfectMax);
+  if(outcome==='perfect')G.totalPerfect++;else if(outcome==='attackable')G.totalAttackable++;else G.totalMiss++;
   logShot('You','drive (serve)',G.serveTarget||'CD',G.serveRoll,outcome,'D','D');
-  G.serveRoll = null;
-  if(outcome==='miss'){
-    G.pointWinner='opp'; G.pointReason='Serve fault. Point to opponent.';
-    G.phase='point'; render(); return;
-  }
-  G.rallyShot = 1;
-  G.phase = 'opp-serve-return';
-  render();
+  G.serveRoll=null;
+  if(outcome==='miss'){G.pointWinner='opp';G.pointReason='Serve fault.';G.phase='point';render();return;}
+  G.rallyShot=1;G.phase='opp-serve-return';render();
 }
 
 function rollOppServe(){
-  const mi  = getMakeInfo('drive','D','CD','comfortable','intermediate');
-  const roll = rollD12();
-  const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
+  const mi=getMakeInfo('drive','D','CD','comfortable','intermediate');
+  const roll=rollD12(),outcome=resolveRoll(roll,mi.makeNum,mi.perfectMax);
   logShot('Opp','drive (serve)','CD',roll,outcome,'D','D');
-  if(outcome==='miss'){
-    G.pointWinner='player'; G.pointReason='Opponent serve fault. Point to you!';
-    G.phase='point'; render(); return;
-  }
-  G.rallyShot = 1;
-  const c = document.getElementById('game-content');
-  c.innerHTML = `
-  <div class="outcome-card ${outcome}">
-    <div class="outcome-word">SERVE LANDED</div>
+  if(outcome==='miss'){G.pointWinner='player';G.pointReason='Opponent serve fault!';G.phase='point';render();return;}
+  G.rallyShot=1;
+  const panel=document.getElementById('action-panel');
+  panel.innerHTML=`<div class="outcome-card ${outcome}">
+    <div class="outcome-word">SERVE IN</div>
     <div class="outcome-roll">Opp rolled ${roll}</div>
-    <div class="outcome-desc">Opponent's serve is in. Return it from Deep — then advance to Kitchen.</div>
+    <div class="outcome-desc">Return from Deep — then advance to Kitchen.</div>
   </div>
   <button class="continue-btn" onclick="G._serveReturn=true;G.phase='player-serve-return';render()">RETURN THE SERVE →</button>`;
+  updateCourtSVG();
 }
 
 function renderOppServeReturn(){
-  const shot   = oppChooseShot('D');
-  const target = oppChooseTarget(shot, 'D', G.playerPos);
-  const mi     = getMakeInfo(shot, 'D', target, 'comfortable', 'intermediate');
-  const roll   = rollD12();
-  const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
-  logShot('Opp', shot, target, roll, outcome, 'D', outcome!=='miss'?'K':'D');
-  if(outcome==='miss'){
-    G.pointWinner='player'; G.pointReason=`Opponent missed their return (${shotLabel(shot)}). Point to you!`;
-    return `
-    <div class="outcome-card perfect">
-      <div class="outcome-word">RETURN MISS!</div>
-      <div class="outcome-roll">Opp rolled ${roll} on a ${shotLabel(shot)}</div>
-      <div class="outcome-desc">Opponent couldn't return the serve. Point to you!</div>
-    </div>
-    <button class="continue-btn" onclick="G.phase='point';render()">COLLECT POINT</button>`;
-  }
-  G.oppPos  = 'K';
-  G.oppRush = 'comfortable';
-  return `
-  <div class="outcome-card ${outcome}">
-    <div class="outcome-word">${outcome.toUpperCase()} RETURN</div>
-    <div class="outcome-roll">Opp rolled ${roll} · ${shotLabel(shot)} → ${target}</div>
-    <div class="outcome-desc">Opponent returns and advances to Kitchen. You're at Deep — your third shot.</div>
-  </div>
+  const shot=oppChooseShot('D'),target=oppChooseTarget(shot,'D',G.playerPos);
+  const mi=getMakeInfo(shot,'D',target,'comfortable','intermediate');
+  const roll=rollD12(),outcome=resolveRoll(roll,mi.makeNum,mi.perfectMax);
+  logShot('Opp',shot,target,roll,outcome,'D',outcome!=='miss'?'K':'D');
+  if(outcome==='miss'){G.pointWinner='player';G.pointReason=`Opponent return miss. Point to you!`;
+    return`<div class="outcome-card perfect"><div class="outcome-word">RETURN MISS!</div><div class="outcome-roll">Opp rolled ${roll}</div></div><button class="continue-btn" onclick="G.phase='point';render()">COLLECT POINT</button>`;}
+  G.oppPos='K';G.oppRush='comfortable';
+  return`<div class="outcome-card ${outcome}"><div class="outcome-word">${outcome.toUpperCase()} RETURN</div><div class="outcome-roll">Opp rolled ${roll} · ${shotLabel(shot)} → ${target}</div><div class="outcome-desc">Opponent advances to Kitchen. Your third shot.</div></div>
   <button class="continue-btn" onclick="beginThirdShot()">YOUR THIRD SHOT →</button>`;
 }
 
-function beginThirdShot(){
-  G.phase = 'player-zone';
-  G.rallyShot++;
-  render();
-}
+function beginThirdShot(){G.phase='player-zone';G.rallyShot++;render();}
 
-function renderPlayerServeReturnRoll(){
-  const mi   = G.lastMakeInfo;
-  const roll = G.lastRoll;
-  const rolled = roll !== null;
-  const shotDisp = G.playerPos === 'K' && G.selectedShot === 'drop' ? 'Dink' : shotLabel(G.selectedShot);
-  return `
-  <div>
-    <div class="phase-title">${shotDisp} → ${G.selectedTarget}</div>
-    <div class="phase-sub">Return from Deep · Comfortable · Make it and advance to Kitchen</div>
+function renderShotForZone(){
+  const zone=G.selectedTarget,rush=G.playerRush;
+  const dmi=getMakeInfo('drive',G.playerPos,zone,rush,G.skillLevel);
+  const lmi=getMakeInfo('lob',G.playerPos,zone,rush,G.skillLevel);
+  const dp=Math.round(dmi.makeNum/12*100),lp=Math.round(lmi.makeNum/12*100);
+  return`<div style="text-align:center;margin-bottom:6px"><div class="phase-title">→ ${zone}</div><div class="phase-sub">Choose your shot</div></div>
+  <div class="shot-row">
+    <button class="shot-btn" onclick="selectShotForZone('drive')"><div class="shot-icon">💨</div><div class="shot-name">DRIVE</div><div class="shot-hint">${dp}% make</div></button>
+    <button class="shot-btn" onclick="selectShotForZone('lob')"><div class="shot-icon">🌙</div><div class="shot-name">LOB</div><div class="shot-hint">${lp}% make</div></button>
   </div>
-  <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
-    <hr class="div">
-    <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1 – ${mi.perfectMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${mi.attackableMin} – ${mi.attackableMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Miss = point to opponent</span><span class="make-val m">${mi.makeNum+1} – 12</span></div>
-  </div>
-  <div class="dice-wrap"><div class="dice" id="dice-el">${rolled?roll:'?'}</div></div>
-  ${rolled ? '' : `<button class="roll-btn" onclick="doServeReturnRoll()">ROLL D12</button>`}
-  ${rolled ? `<button class="continue-btn" onclick="resolveServeReturn()">SEE RESULT →</button>` : ''}
-  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-serve-return';render()">← Change Target</button>`;
-}
-
-function doServeReturnRoll(){
-  G.lastRoll = rollD12();
-  G.totalShots++;
-  const d = document.getElementById('dice-el');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>d.classList.remove('rolling'),500); }
-  render();
-}
-
-function resolveServeReturn(){
-  const mi = G.lastMakeInfo;
-  const outcome = resolveRoll(G.lastRoll, mi.makeNum, mi.perfectMax);
-  if(outcome==='perfect') G.totalPerfect++;
-  else if(outcome==='attackable') G.totalAttackable++;
-  else G.totalMiss++;
-  logShot('You', G.selectedShot, G.selectedTarget, G.lastRoll, outcome, 'D', outcome!=='miss'?'K':'D');
-  if(outcome==='miss'){
-    G.pointWinner='opp'; G.pointReason=`Your return (${shotLabel(G.selectedShot)}) missed. Point to opponent.`;
-    G._serveReturn=false; G.phase='point'; render(); return;
-  }
-  const roll = G.lastRoll;
-  G.playerPos='K'; G.playerRush='comfortable';
-  G._serveReturn=false; G.lastRoll=null;
-  const c = document.getElementById('game-content');
-  c.innerHTML=`
-  <div class="outcome-card ${outcome}">
-    <div class="outcome-word">${outcome.toUpperCase()} RETURN</div>
-    <div class="outcome-roll">Rolled ${roll} · ${shotLabel(G.selectedShot)} → ${G.selectedTarget}</div>
-    <div class="outcome-desc">You advance to Kitchen. Opponent is at Deep — their third shot.</div>
-  </div>
-  <button class="continue-btn" onclick="G.phase='opp-turn';G.rallyShot++;render()">OPPONENT'S THIRD SHOT →</button>`;
+  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">← Change Zone</button>`;
 }
 
 function renderPlayerRoll(){
-  const mi   = G.lastMakeInfo;
-  const roll = G.lastRoll;
-  const rolled = roll !== null;
-  const shotDisp = G.selectedShot === 'dink' ? 'Dink' : shotLabel(G.selectedShot);
-  return `
-  <div>
-    <div class="phase-title">${shotDisp} → ${G.selectedTarget}</div>
-    <div class="phase-sub">From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'}</div>
-  </div>
+  const mi=G.lastMakeInfo,roll=G.lastRoll,rolled=roll!==null;
+  const shotDisp=G.selectedShot==='dink'?'Dink':shotLabel(G.selectedShot);
+  const isSR=G._serveReturn;
+  return`<div><div class="phase-title">${shotDisp} → ${G.selectedTarget}</div>
+  <div class="phase-sub">From ${tierLabel(G.playerPos)} · ${G.playerRush==='stretched'?'⚠ Stretched':'✓ Comfortable'}${isSR?' · Make it → advance to Kitchen':''}</div></div>
   <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${mi.makeNum} of 12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
+    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${mi.makeNum}/12 (${Math.round(mi.makeNum/12*100)}%)</span></div>
     <hr class="div">
-    <div class="make-row"><span class="make-lbl">Perfect band</span><span class="make-val p">1 – ${mi.perfectMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Attackable band</span><span class="make-val a">${mi.attackableMin} – ${mi.attackableMax}</span></div>
-    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${mi.makeNum+1} – 12</span></div>
+    <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${mi.perfectMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${mi.attackableMin}–${mi.attackableMax}</span></div>
+    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${mi.makeNum+1}–12</span></div>
   </div>
   <div class="dice-wrap"><div class="dice" id="dice-el">${rolled?roll:'?'}</div></div>
-  ${rolled ? '' : `<button class="roll-btn" onclick="doPlayerRoll()">ROLL D12</button>`}
-  ${rolled ? `<button class="continue-btn" onclick="resolvePlayerOutcome()">SEE RESULT →</button>` : ''}
-  <button class="continue-btn" onclick="G.selectedZone=null;${['LD','CD','RD'].includes(G.selectedTarget)?`G.phase='player-shot-for-zone'`:`G.phase='player-zone'`};render()">← Change Shot</button>`;
+  ${rolled?`<button class="roll-btn" style="background:var(--success);color:#0a1a10" onclick="${isSR?'resolveServeReturn':'resolvePlayerOutcome'}()">SEE RESULT →</button>`:`<button class="roll-btn" onclick="doRoll()">ROLL D12</button>`}
+  <button class="continue-btn" onclick="G.lastRoll=null;G.selectedZone=null;${['LD','CD','RD'].includes(G.selectedTarget)?`G.phase='player-shot-for-zone'`:`G.phase=${isSR?`'player-serve-return'`:`'player-zone'`}`};render()">← Change</button>`;
 }
 
-function doPlayerRoll(){
-  G.lastRoll = rollD12();
-  G.totalShots++;
-  const d = document.getElementById('dice-el');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>d.classList.remove('rolling'),500); }
+function doRoll(){
+  G.lastRoll=rollD12();G.totalShots++;
+  const d=document.getElementById('dice-el');
+  if(d){d.classList.add('rolling');setTimeout(()=>d.classList.remove('rolling'),500);}
   render();
+}
+
+function tapZone(zone){
+  G.selectedZone=zone;G.selectedTarget=zone;
+  const contactPos=getContactPos(zone);
+  const baseRush=getRush(G.playerPos,contactPos);
+  const rush=G.nextPlayerComfortable?'comfortable':baseRush;
+  G.playerRush=rush;G.nextPlayerComfortable=false;
+  const isKit=['LK','CK','RK'].includes(zone),isMid=['LM','CM','RM'].includes(zone);
+  if(isKit){
+    G.selectedShot=G.playerPos==='K'?'dink':'drop';
+    G.lastMakeInfo=getMakeInfo('drop',G.playerPos,zone,rush,G.skillLevel);
+    G.lastRoll=null;G.phase=G._serveReturn?'player-serve-return-roll':'player-roll';render();
+  } else if(isMid){
+    G.selectedShot='drive';
+    G.lastMakeInfo=getMakeInfo('drive',G.playerPos,zone,rush,G.skillLevel);
+    G.lastRoll=null;G.phase=G._serveReturn?'player-serve-return-roll':'player-roll';render();
+  } else {
+    if(G.playerPos==='K'){
+      G.selectedShot='lob';
+      G.lastMakeInfo=getMakeInfo('lob',G.playerPos,zone,rush,G.skillLevel);
+      G.lastRoll=null;G.phase=G._serveReturn?'player-serve-return-roll':'player-roll';render();
+    } else {G.phase='player-shot-for-zone';render();}
+  }
+}
+
+function selectShotForZone(shot){
+  G.selectedShot=shot;
+  G.lastMakeInfo=getMakeInfo(shot,G.playerPos,G.selectedTarget,G.playerRush,G.skillLevel);
+  G.lastRoll=null;G.phase=G._serveReturn?'player-serve-return-roll':'player-roll';render();
+}
+
+function resolveServeReturn(){
+  const mi=G.lastMakeInfo,outcome=resolveRoll(G.lastRoll,mi.makeNum,mi.perfectMax);
+  if(outcome==='perfect')G.totalPerfect++;else if(outcome==='attackable')G.totalAttackable++;else G.totalMiss++;
+  logShot('You',G.selectedShot,G.selectedTarget,G.lastRoll,outcome,'D',outcome!=='miss'?'K':'D');
+  if(outcome==='miss'){G.pointWinner='opp';G.pointReason=`Return missed.`;G._serveReturn=false;G.phase='point';render();return;}
+  const roll=G.lastRoll;
+  G.playerPos='K';G.playerRush='comfortable';G._serveReturn=false;G.lastRoll=null;
+  const panel=document.getElementById('action-panel');
+  panel.innerHTML=`<div class="outcome-card ${outcome}"><div class="outcome-word">${outcome.toUpperCase()} RETURN</div><div class="outcome-roll">Rolled ${roll} · ${shotLabel(G.selectedShot)} → ${G.selectedTarget}</div><div class="outcome-desc">You advance to Kitchen. Opponent at Deep — their third shot.</div></div>
+  <button class="continue-btn" onclick="G.phase='opp-turn';G.rallyShot++;render()">OPPONENT'S THIRD SHOT →</button>`;
+  updateCourtSVG();
 }
 
 function resolvePlayerOutcome(){
-  const mi = G.lastMakeInfo;
-  G.lastOutcome = resolveRoll(G.lastRoll, mi.makeNum, mi.perfectMax);
-  if(G.lastOutcome==='perfect') G.totalPerfect++;
-  else if(G.lastOutcome==='attackable') G.totalAttackable++;
-  else G.totalMiss++;
-  G.phase = 'player-outcome';
-  render();
+  const mi=G.lastMakeInfo;
+  G.lastOutcome=resolveRoll(G.lastRoll,mi.makeNum,mi.perfectMax);
+  if(G.lastOutcome==='perfect')G.totalPerfect++;else if(G.lastOutcome==='attackable')G.totalAttackable++;else G.totalMiss++;
+  G.phase='player-outcome';render();
 }
 
 function renderPlayerOutcome(){
-  const shot    = G.selectedShot;
-  const target  = G.selectedTarget;
-  const outcome = G.lastOutcome;
-  const roll    = G.lastRoll;
-  const contactPos = getContactPos(target);
-
-  let desc='', newYouPos='', newOppPos='';
-
-  if(outcome==='miss'){
-    desc='Out or into the net. Point to opponent.';
-    newYouPos=G.playerPos; newOppPos=G.oppPos;
-  } else if(shot==='drive'){
-    newOppPos = G.oppPos;
-    if(outcome==='perfect'){
-      newYouPos = contactPos==='D'?'M':contactPos;
-      desc='Perfect drive! Receiver gets only a weak block. You advance and get a Comfortable next shot.';
-      G.nextPlayerComfortable = true;
-    } else {
-      newYouPos = contactPos;
-      desc='Drive lands — receiver blocks it back. Your next shot.';
-    }
+  const shot=G.selectedShot,target=G.selectedTarget,outcome=G.lastOutcome,roll=G.lastRoll;
+  const contactPos=getContactPos(target);
+  let desc='',newYou='',newOpp='';
+  if(outcome==='miss'){desc='Out or into the net.';newYou=G.playerPos;newOpp=G.oppPos;}
+  else if(shot==='drive'){
+    newOpp=G.oppPos;
+    if(outcome==='perfect'){newYou=contactPos==='D'?'M':contactPos;desc='Perfect drive! Weak block — you advance and get a Comfortable next shot.';G.nextPlayerComfortable=true;}
+    else{newYou=contactPos;desc='Drive lands — receiver blocks it back.';}
   } else if(outcome==='perfect'){
-    if(shot==='drop'||shot==='dink'){
-      newYouPos='K'; newOppPos='K';
-      desc='Perfect drop into the kitchen! RESET — both players advance to the Kitchen line.';
-    } else {
-      newYouPos = contactPos; newOppPos='D';
-      desc='Perfect lob! Opponent is pushed all the way back to Deep.';
-    }
+    if(shot==='drop'||shot==='dink'){newYou='K';newOpp='K';desc='Perfect drop! RESET — both to Kitchen.';}
+    else{newYou=contactPos;newOpp='D';desc='Perfect lob! Opponent pushed to Deep.';}
   } else {
-    newYouPos=contactPos; newOppPos=G.oppPos;
-    if(shot==='drop'||shot==='dink') desc='Drop lands but sits up — attackable if opponent is at the Kitchen.';
-    else desc='Lob is catchable — no damage done.';
+    newYou=contactPos;newOpp=G.oppPos;
+    desc=shot==='drop'||shot==='dink'?'Drop sits up — attackable if opp at Kitchen.':'Lob catchable — no damage.';
   }
-
-  logShot('You', shot, target, roll, outcome, G.playerPos, newYouPos);
-  G.playerPos = newYouPos;
-  if(shot!=='drive') G.oppPos = newOppPos;
-
-  if(outcome==='miss'){
-    G.pointWinner='opp'; G.pointReason=`Your ${shotLabel(shot)} missed.`;
-    G.phase='point'; render(); return '';
-  }
-
-  if(shot==='drive'){
-    G.selectedZone=null;
-    G.phase='player-zone'; G.rallyShot++;
-    return renderMiniOutcome(outcome,roll,desc)+
-      `<button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">YOUR NEXT SHOT →</button>`;
-  }
-
-  if(outcome==='attackable' && G.oppPos==='K'){
-    return renderMiniOutcome(outcome,roll,desc)+
-      `<button class="danger-btn" onclick="G.phase='opp-smash';render()">OPPONENT SMASHES ⚡</button>`;
-  }
-
-  return renderMiniOutcome(outcome,roll,desc)+
-    `<button class="continue-btn" onclick="startOppTurn()">OPPONENT'S TURN →</button>`;
+  logShot('You',shot,target,roll,outcome,G.playerPos,newYou);
+  G.playerPos=newYou;if(shot!=='drive')G.oppPos=newOpp;
+  if(outcome==='miss'){G.pointWinner='opp';G.pointReason=`Your ${shotLabel(shot)} missed.`;G.phase='point';render();return'';}
+  if(shot==='drive'){G.selectedZone=null;G.rallyShot++;
+    return mini(outcome,roll,desc)+`<button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';render()">YOUR NEXT SHOT →</button>`;}
+  if(outcome==='attackable'&&G.oppPos==='K')
+    return mini(outcome,roll,desc)+`<button class="danger-btn" onclick="G.phase='opp-smash';render()">OPPONENT SMASHES ⚡</button>`;
+  return mini(outcome,roll,desc)+`<button class="continue-btn" onclick="startOppTurn()">OPPONENT'S TURN →</button>`;
 }
 
-function renderMiniOutcome(outcome, roll, desc){
-  return `
-  <div class="outcome-card ${outcome}">
-    <div class="outcome-word">${outcome.toUpperCase()}</div>
-    <div class="outcome-roll">Rolled ${roll}</div>
-    <div class="outcome-desc">${desc}</div>
-  </div>`;
-}
+function mini(outcome,roll,desc){return`<div class="outcome-card ${outcome}"><div class="outcome-word">${outcome.toUpperCase()}</div><div class="outcome-roll">Rolled ${roll}</div><div class="outcome-desc">${desc}</div></div>`;}
 
 function startOppTurn(){
-  G.phase='opp-turn'; G.rallyShot++;
-  const oppShot   = oppChooseShot(G.oppPos);
-  const oppTarget = oppChooseTarget(oppShot, G.oppPos, G.playerPos);
-  const contactPos = getContactPos(oppTarget);
-  const baseRush  = getRush(G.oppPos, contactPos);
-  const rush      = G.nextOppComfortable ? 'comfortable' : baseRush;
-  G.nextOppComfortable = false;
-  G.oppRush = rush;
-  G.oppSelectedShot  = oppShot;
-  G.oppSelectedTarget = oppTarget;
-  G.oppContactPos    = contactPos;
-  G.oppMakeInfo      = getMakeInfo(oppShot, G.oppPos, oppTarget, rush, 'intermediate');
-  render();
+  G.phase='opp-turn';G.rallyShot++;
+  const s=oppChooseShot(G.oppPos),t=oppChooseTarget(s,G.oppPos,G.playerPos);
+  const cp=getContactPos(t),rush=G.nextOppComfortable?'comfortable':getRush(G.oppPos,cp);
+  G.nextOppComfortable=false;G.oppRush=rush;
+  G.oppSelectedShot=s;G.oppSelectedTarget=t;G.oppContactPos=cp;
+  G.oppMakeInfo=getMakeInfo(s,G.oppPos,t,rush,'intermediate');render();
 }
 
 function renderOppTurn(){
-  return `
-  <div>
-    <div class="phase-title">OPPONENT'S TURN</div>
-    <div class="phase-sub">From ${tierLabel(G.oppPos)} · ${G.oppRush==='stretched'?'⚠️ Stretched':'✓ Comfortable'}</div>
-  </div>
+  return`<div><div class="phase-title">OPPONENT'S TURN</div><div class="phase-sub">From ${tierLabel(G.oppPos)} · ${G.oppRush==='stretched'?'⚠ Stretched':'✓ Comfortable'}</div></div>
   <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Shot</span><span class="make-val">${shotLabel(G.oppSelectedShot)} → ${G.oppSelectedTarget}</span></div>
-    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${G.oppMakeInfo.makeNum} of 12</span></div>
+    <div class="make-row"><span class="make-lbl">${shotLabel(G.oppSelectedShot)} → ${G.oppSelectedTarget}</span><span class="make-val">${G.oppMakeInfo.makeNum}/12</span></div>
     <hr class="div">
     <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${G.oppMakeInfo.perfectMax}</span></div>
     <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${G.oppMakeInfo.attackableMin}–${G.oppMakeInfo.attackableMax}</span></div>
@@ -980,306 +700,158 @@ function renderOppTurn(){
 }
 
 function rollOppShot(){
-  const roll    = rollD12();
-  const mi      = G.oppMakeInfo;
-  const outcome = resolveRoll(roll, mi.makeNum, mi.perfectMax);
-  const shot    = G.oppSelectedShot;
-  const target  = G.oppSelectedTarget;
-  const contactPos = G.oppContactPos;
-
-  G.lastRoll=roll; G.lastOutcome=outcome;
-
-  const d = document.getElementById('opp-dice');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
-
-  let desc='', newOppPos='', newYouPos='';
-
-  if(outcome==='miss'){
-    desc='Opponent missed! Point to you.';
-    newOppPos=G.oppPos; newYouPos=G.playerPos;
-  } else if(shot==='drive'){
-    newYouPos=G.playerPos;
-    if(outcome==='perfect'){
-      newOppPos=contactPos==='D'?'M':contactPos;
-      desc='Opponent drive is perfect — you can only block. They advance and get a Comfortable next shot.';
-      G.nextOppComfortable=true;
-    } else {
-      newOppPos=contactPos;
-      desc='Drive blocked back. Opponent continues.';
-    }
-  } else if(outcome==='perfect'){
-    if(shot==='drop'){
-      newOppPos='K'; newYouPos='K';
-      desc='Perfect drop — RESET. Both players advance to the Kitchen line.';
-    } else {
-      newOppPos=contactPos; newYouPos='D';
-      desc='Perfect lob! You\'re pushed all the way back to Deep.';
-    }
-  } else {
-    newOppPos=contactPos; newYouPos=G.playerPos;
-    desc=shot==='drop'?'Drop sits up — attackable if you\'re at the Kitchen.':'Lob is catchable.';
-  }
-
-  logShot('Opp', shot, target, roll, outcome, G.oppPos, newOppPos);
-  G.oppPos = newOppPos;
-  if(shot!=='drive') G.playerPos = newYouPos;
-
-  if(outcome==='miss'){
-    G.pointWinner='player'; G.pointReason=`Opponent's ${shotLabel(shot)} missed.`;
-    G.phase='point';
-    setTimeout(()=>render(),600); return;
-  }
-  if(shot==='drive'){
-    setTimeout(()=>{ G.phase='opp-turn'; startOppTurn(); },600); return;
-  }
-  if(outcome==='attackable' && G.playerPos==='K'){
-    setTimeout(()=>{ G.phase='player-smash'; render(); },600); return;
-  }
-  setTimeout(()=>{ G.selectedZone=null; G.phase='player-zone'; G.rallyShot++; render(); },600);
+  const roll=rollD12(),mi=G.oppMakeInfo,outcome=resolveRoll(roll,mi.makeNum,mi.perfectMax);
+  const shot=G.oppSelectedShot,target=G.oppSelectedTarget,cp=G.oppContactPos;
+  const d=document.getElementById('opp-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  let desc='',newOpp='',newYou='';
+  if(outcome==='miss'){desc='Opponent missed!';newOpp=G.oppPos;newYou=G.playerPos;}
+  else if(shot==='drive'){newYou=G.playerPos;if(outcome==='perfect'){newOpp=cp==='D'?'M':cp;desc='Perfect drive — you can only block. Opponent advances.';G.nextOppComfortable=true;}else{newOpp=cp;desc='Drive blocked back.';}}
+  else if(outcome==='perfect'){if(shot==='drop'){newOpp='K';newYou='K';desc='Perfect drop — RESET. Both to Kitchen.';}else{newOpp=cp;newYou='D';desc='Perfect lob — you\'re pushed to Deep.';}}
+  else{newOpp=cp;newYou=G.playerPos;desc=shot==='drop'?'Drop sits up — attackable if you\'re at Kitchen.':'Lob catchable.';}
+  logShot('Opp',shot,target,roll,outcome,G.oppPos,newOpp);
+  G.oppPos=newOpp;if(shot!=='drive')G.playerPos=newYou;
+  if(outcome==='miss'){G.pointWinner='player';G.pointReason=`Opponent's ${shotLabel(shot)} missed.`;G.phase='point';setTimeout(()=>render(),600);return;}
+  if(shot==='drive'){setTimeout(()=>{G.phase='opp-turn';startOppTurn();},600);return;}
+  if(outcome==='attackable'&&G.playerPos==='K'){setTimeout(()=>{G.phase='player-smash';render();},600);return;}
+  setTimeout(()=>{G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render();},600);
 }
 
 function renderPlayerSmash(){
-  return `
-  <div class="alert-box smash">
-    <div class="alert-title">⚡ SMASH OPPORTUNITY!</div>
-    <div class="alert-sub">Opponent left an Attackable ball and you're at the Kitchen!</div>
-  </div>
+  return`<div class="alert-box smash"><div class="alert-title">⚡ SMASH!</div><div class="alert-sub">Opp left an Attackable ball and you're at Kitchen</div></div>
   <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Smash Make #</span><span class="make-val">11 of 12 (92%)</span></div>
+    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">11/12 (92%)</span></div>
     <hr class="div">
-    <div class="make-row"><span class="make-lbl">Perfect (put-away)</span><span class="make-val p">1 – 6</span></div>
-    <div class="make-row"><span class="make-lbl">Attackable (survived)</span><span class="make-val a">7 – 11</span></div>
-    <div class="make-row"><span class="make-lbl">Whiff (12)</span><span class="make-val m">12</span></div>
+    <div class="make-row"><span class="make-lbl">Perfect (put-away)</span><span class="make-val p">1–6</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable (survived)</span><span class="make-val a">7–11</span></div>
+    <div class="make-row"><span class="make-lbl">Whiff</span><span class="make-val m">12</span></div>
   </div>
   <div class="dice-wrap"><div class="dice" id="smash-dice">?</div></div>
   <button class="roll-btn" onclick="rollPlayerSmash()">SMASH!</button>`;
 }
 
 function rollPlayerSmash(){
-  const roll = rollD12();
-  const makeNum=11, perfectMax=6;
-  const outcome = roll===12?'miss':resolveRoll(roll,makeNum,perfectMax);
-  G.smashRoll=roll; G.smashOutcome=outcome;
+  const roll=rollD12(),outcome=roll===12?'miss':resolveRoll(roll,11,6);
   const d=document.getElementById('smash-dice');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
   logShot('You','smash','—',roll,outcome,G.playerPos,G.playerPos);
-  if(outcome==='perfect'){
-    G.pointWinner='player'; G.pointReason='Clean smash put-away! Point to you.';
-    setTimeout(()=>{ G.phase='point'; render(); },600); return;
-  }
-  if(roll===12){
-    G.pointWinner='opp'; G.pointReason='Smash whiff (rolled 12). Point back to opponent.';
-    setTimeout(()=>{ G.phase='point'; render(); },600); return;
-  }
-  setTimeout(()=>{ G.phase='opp-block'; render(); },600);
+  if(outcome==='perfect'){G.pointWinner='player';G.pointReason='Clean smash!';setTimeout(()=>{G.phase='point';render();},600);return;}
+  if(roll===12){G.pointWinner='opp';G.pointReason='Smash whiff (rolled 12).';setTimeout(()=>{G.phase='point';render();},600);return;}
+  setTimeout(()=>{G.phase='opp-block';render();},600);
 }
 
 function renderOppSmash(){
-  const mi   = TABLES.drive['K']['c'];
-  const roll = rollD12();
-  const outcome = roll===12?'miss':resolveRoll(roll,mi.m,mi.p);
-  G.smashRoll=roll; G.smashOutcome=outcome;
+  const mi=TABLES.drive['K']['c'],roll=rollD12(),outcome=roll===12?'miss':resolveRoll(roll,mi.m,mi.p);
   logShot('Opp','smash','—',roll,outcome,G.oppPos,G.oppPos);
-  if(outcome==='perfect'){
-    G.pointWinner='opp'; G.pointReason='Opponent clean smash put-away! Point to opponent.';
-    return `
-    <div class="outcome-card miss">
-      <div class="outcome-word">SMASHED!</div>
-      <div class="outcome-roll">Rolled ${roll}</div>
-      <div class="outcome-desc">Clean put-away — point to opponent.</div>
-    </div>
-    <button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;
-  }
-  if(roll===12){
-    G.pointWinner='player'; G.pointReason='Opponent whiffed the smash! Point to you.';
-    return `
-    <div class="outcome-card perfect">
-      <div class="outcome-word">WHIFF!</div>
-      <div class="outcome-roll">Rolled 12</div>
-      <div class="outcome-desc">Opponent whiffed the smash. Point to you!</div>
-    </div>
-    <button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;
-  }
-  return `
-  <div class="outcome-card attackable">
-    <div class="outcome-word">HARD SMASH!</div>
-    <div class="outcome-roll">Rolled ${roll}</div>
-    <div class="outcome-desc">Opponent's smash is hard but not clean. You get a block attempt!</div>
-  </div>
+  if(outcome==='perfect'){G.pointWinner='opp';G.pointReason='Opponent clean smash.';
+    return`<div class="outcome-card miss"><div class="outcome-word">SMASHED!</div><div class="outcome-roll">Rolled ${roll}</div></div><button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;}
+  if(roll===12){G.pointWinner='player';G.pointReason='Opponent whiffed the smash!';
+    return`<div class="outcome-card perfect"><div class="outcome-word">WHIFF!</div><div class="outcome-roll">Rolled 12</div></div><button class="continue-btn" onclick="G.phase='point';render()">CONTINUE</button>`;}
+  return`<div class="outcome-card attackable"><div class="outcome-word">HARD SMASH!</div><div class="outcome-roll">Rolled ${roll}</div><div class="outcome-desc">Hard but not clean — you get a block attempt!</div></div>
   <button class="danger-btn" onclick="G.phase='player-block';render()">ATTEMPT BLOCK →</button>`;
 }
 
 function renderPlayerBlock(){
-  const defPos    = G.playerPos;
-  const blockData = TABLES.block[defPos];
-  if(!blockData){
-    G.pointWinner='opp'; G.pointReason='No block from Kitchen — too close to react. Point to opponent.';
-    G.phase='point'; render(); return '';
-  }
-  return `
-  <div class="alert-box block">
-    <div class="alert-title">🛡️ BLOCK ATTEMPT</div>
-    <div class="alert-sub">You're at ${tierLabel(defPos)} — dig it out!</div>
-  </div>
+  const bd=TABLES.block[G.playerPos];
+  if(!bd){G.pointWinner='opp';G.pointReason='No block from Kitchen.';G.phase='point';render();return'';}
+  return`<div class="alert-box block"><div class="alert-title">🛡 BLOCK</div><div class="alert-sub">You're at ${tierLabel(G.playerPos)}</div></div>
   <div class="make-card">
-    <div class="make-row"><span class="make-lbl">Block Make #</span><span class="make-val">${blockData.m} of 12 (${Math.round(blockData.m/12*100)}%)</span></div>
+    <div class="make-row"><span class="make-lbl">Make #</span><span class="make-val">${bd.m}/12 (${Math.round(bd.m/12*100)}%)</span></div>
     <hr class="div">
-    <div class="make-row"><span class="make-lbl">Perfect (clean dig)</span><span class="make-val p">1 – ${blockData.p}</span></div>
-    <div class="make-row"><span class="make-lbl">Attackable (weak dig)</span><span class="make-val a">${blockData.p+1} – ${blockData.m}</span></div>
-    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${blockData.m+1} – 12</span></div>
+    <div class="make-row"><span class="make-lbl">Perfect</span><span class="make-val p">1–${bd.p}</span></div>
+    <div class="make-row"><span class="make-lbl">Attackable</span><span class="make-val a">${bd.p+1}–${bd.m}</span></div>
+    <div class="make-row"><span class="make-lbl">Miss</span><span class="make-val m">${bd.m+1}–12</span></div>
   </div>
   <div class="dice-wrap"><div class="dice" id="block-dice">?</div></div>
-  <button class="roll-btn" onclick="rollPlayerBlock()" style="background:var(--warning);color:#0b1f14">BLOCK!</button>`;
+  <button class="roll-btn" style="background:var(--warning);color:#0a1a10" onclick="rollPlayerBlock()">BLOCK!</button>`;
 }
 
 function rollPlayerBlock(){
-  const defPos    = G.playerPos;
-  const blockData = TABLES.block[defPos];
-  if(!blockData){ G.pointWinner='opp'; G.pointReason='No block from Kitchen.'; G.phase='point'; render(); return; }
-  const roll    = rollD12();
-  const outcome = resolveRoll(roll, blockData.m, blockData.p);
-  G.blockRoll=roll; G.blockOutcome=outcome;
-  const d = document.getElementById('block-dice');
-  if(d){ d.classList.add('rolling'); setTimeout(()=>{ d.textContent=roll; d.classList.remove('rolling'); },300); }
-  logShot('You','block','—',roll,outcome,defPos,defPos);
-  if(outcome==='miss'){
-    G.pointWinner='opp'; G.pointReason='Block missed — point to opponent.';
-    setTimeout(()=>{ G.phase='point'; render(); },600); return;
-  }
-  if(outcome==='perfect'){
-    G.playerPos='K'; G.oppPos='K';
-    setTimeout(()=>{
-      const c=document.getElementById('game-content');
-      c.innerHTML=`
-      <div class="outcome-card perfect">
-        <div class="outcome-word">CLEAN BLOCK!</div>
-        <div class="outcome-roll">Rolled ${roll}</div>
-        <div class="outcome-desc">Perfect dig — RESET. Both players go to the Kitchen line. Rally continues!</div>
-      </div>
-      <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE RALLY →</button>`;
-    },600); return;
-  }
-  if(G.oppPos==='K'){
-    setTimeout(()=>{ G.phase='opp-smash'; render(); },600); return;
-  }
-  setTimeout(()=>{ G.selectedZone=null; G.phase='player-zone'; G.rallyShot++; render(); },600);
+  const bd=TABLES.block[G.playerPos];
+  if(!bd){G.pointWinner='opp';G.pointReason='No block from Kitchen.';G.phase='point';render();return;}
+  const roll=rollD12(),outcome=resolveRoll(roll,bd.m,bd.p);
+  const d=document.getElementById('block-dice');
+  if(d){d.classList.add('rolling');setTimeout(()=>{d.textContent=roll;d.classList.remove('rolling');},300);}
+  logShot('You','block','—',roll,outcome,G.playerPos,G.playerPos);
+  if(outcome==='miss'){G.pointWinner='opp';G.pointReason='Block missed.';setTimeout(()=>{G.phase='point';render();},600);return;}
+  if(outcome==='perfect'){G.playerPos='K';G.oppPos='K';
+    setTimeout(()=>{const p=document.getElementById('action-panel');p.innerHTML=`<div class="outcome-card perfect"><div class="outcome-word">CLEAN BLOCK!</div><div class="outcome-roll">Rolled ${roll}</div><div class="outcome-desc">Perfect dig — RESET. Both to Kitchen!</div></div><button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE RALLY →</button>`;updateCourtSVG();},600);return;}
+  if(G.oppPos==='K'){setTimeout(()=>{G.phase='opp-smash';render();},600);return;}
+  setTimeout(()=>{G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render();},600);
 }
 
 function renderOppBlock(){
-  const defPos    = G.oppPos;
-  const blockData = TABLES.block[defPos];
-  if(!blockData){
-    G.pointWinner='player'; G.pointReason='No block from Kitchen for opponent. Point to you!';
-    G.phase='point'; render(); return '';
-  }
-  const roll    = rollD12();
-  const outcome = resolveRoll(roll, blockData.m, blockData.p);
-  G.blockRoll=roll; G.blockOutcome=outcome;
-  logShot('Opp','block','—',roll,outcome,defPos,defPos);
-  if(outcome==='miss'){
-    G.pointWinner='player'; G.pointReason='Opponent couldn\'t get a paddle on it. Point to you!';
-    return `
-    <div class="outcome-card perfect"><div class="outcome-word">WINNER!</div>
-    <div class="outcome-roll">Opp rolled ${roll}</div>
-    <div class="outcome-desc">Opponent missed the block!</div></div>
-    <button class="continue-btn" onclick="G.phase='point';render()">COLLECT THE POINT</button>`;
-  }
-  if(outcome==='perfect'){
-    G.playerPos='K'; G.oppPos='K';
-    return `
-    <div class="outcome-card attackable"><div class="outcome-word">CLEAN BLOCK</div>
-    <div class="outcome-roll">Opp rolled ${roll}</div>
-    <div class="outcome-desc">Opponent digs it out perfectly — RESET. Both to Kitchen. Rally continues.</div></div>
-    <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE →</button>`;
-  }
-  if(G.playerPos==='K'){
-    return `
-    <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
-    <div class="outcome-roll">Opp rolled ${roll}</div>
-    <div class="outcome-desc">Opponent's block is weak and still attackable. SMASH AGAIN!</div></div>
-    <button class="danger-btn" onclick="G.phase='player-smash';render()">SMASH AGAIN! ⚡</button>`;
-  }
-  return `
-  <div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div>
-  <div class="outcome-roll">Opp rolled ${roll}</div>
-  <div class="outcome-desc">Weak dig but you're not at the net. Rally continues.</div></div>
-  <button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">YOUR SHOT →</button>`;
+  const bd=TABLES.block[G.oppPos];
+  if(!bd){G.pointWinner='player';G.pointReason='No block from Kitchen for opp!';G.phase='point';render();return'';}
+  const roll=rollD12(),outcome=resolveRoll(roll,bd.m,bd.p);
+  logShot('Opp','block','—',roll,outcome,G.oppPos,G.oppPos);
+  if(outcome==='miss')return`<div class="outcome-card perfect"><div class="outcome-word">WINNER!</div><div class="outcome-roll">Opp rolled ${roll}</div></div><button class="continue-btn" onclick="G.phase='point';render()">COLLECT POINT</button>`;
+  if(outcome==='perfect'){G.playerPos='K';G.oppPos='K';
+    return`<div class="outcome-card attackable"><div class="outcome-word">CLEAN BLOCK</div><div class="outcome-roll">Opp rolled ${roll}</div><div class="outcome-desc">RESET — both to Kitchen.</div></div><button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">CONTINUE →</button>`;}
+  if(G.playerPos==='K')return`<div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div><div class="outcome-roll">Opp rolled ${roll}</div></div><button class="danger-btn" onclick="G.phase='player-smash';render()">SMASH AGAIN! ⚡</button>`;
+  return`<div class="outcome-card attackable"><div class="outcome-word">WEAK BLOCK</div><div class="outcome-roll">Opp rolled ${roll}</div></div><button class="continue-btn" onclick="G.selectedZone=null;G.phase='player-zone';G.rallyShot++;render()">YOUR SHOT →</button>`;
 }
 
 function renderPoint(){
-  const won = G.pointWinner==='player';
-  if(won){ G.playerScore++; } else { G.oppScore++; }
-  G.playerServing = won;
-  G.rallyNum++;
-  const gameOver = (G.playerScore>=11||G.oppScore>=11) && Math.abs(G.playerScore-G.oppScore)>=2;
-  if(gameOver){ setTimeout(()=>showGameOver(),1200); }
-  return `
-  <div class="point-screen">
+  const won=G.pointWinner==='player';
+  if(won)G.playerScore++;else G.oppScore++;
+  G.playerServing=won;G.rallyNum++;
+  const gameOver=(G.playerScore>=11||G.oppScore>=11)&&Math.abs(G.playerScore-G.oppScore)>=2;
+  if(gameOver)setTimeout(()=>showGameOver(),1200);
+  return`<div class="point-screen">
     <div class="point-emoji">${won?'🎉':'😤'}</div>
     <div class="point-label ${won?'you':'opp'}">${won?'YOUR POINT!':'THEIR POINT'}</div>
     <div class="point-reason">${G.pointReason}</div>
   </div>
-  <div class="make-card" style="margin-bottom:8px">
+  <div class="make-card" style="margin-bottom:6px">
     <div class="make-row"><span class="make-lbl">Score</span><span class="make-val">${G.playerScore} – ${G.oppScore}</span></div>
     <div class="make-row"><span class="make-lbl">Next serve</span><span class="make-val">${won?'You':'Opponent'}</span></div>
   </div>
-  ${!gameOver?`<button class="continue-btn" onclick="nextRally()">NEXT RALLY →</button>`:'<div style="text-align:center;color:var(--muted);font-size:13px">Finishing game...</div>'}`;
+  ${!gameOver?`<button class="continue-btn" onclick="nextRally()">NEXT RALLY →</button>`:'<div style="text-align:center;color:var(--muted);font-size:12px">Finishing...</div>'}`;
 }
 
 function nextRally(){
-  G.playerPos='D'; G.oppPos='D';
-  G.serveRoll=null; G.serveMakeInfo=null; G.serveTarget=null;
-  G.playerRush='comfortable'; G.oppRush='comfortable';
-  G.nextPlayerComfortable=false; G.nextOppComfortable=false;
-  G.rallyShot=0; G.selectedZone=null; G.selectedTarget=null; G.selectedShot=null;
-  G._serveReturn=false;
-  G.phase='serve';
-  render();
+  G.playerPos='D';G.oppPos='D';
+  G.serveRoll=null;G.serveMakeInfo=null;G.serveTarget=null;
+  G.playerRush='comfortable';G.oppRush='comfortable';
+  G.nextPlayerComfortable=false;G.nextOppComfortable=false;
+  G.rallyShot=0;G.selectedZone=null;G.selectedTarget=null;G.selectedShot=null;
+  G._serveReturn=false;G.phase='serve';render();
 }
 
 function showGameOver(){
   document.getElementById('screen-game').style.display='none';
   document.getElementById('screen-gameover').style.display='flex';
-  const won = G.playerScore>G.oppScore;
-  document.getElementById('go-title').textContent = won?'YOU WIN!':'GOOD EFFORT';
-  document.getElementById('go-score').textContent = `${G.playerScore} – ${G.oppScore}`;
-  document.getElementById('go-msg').textContent = won
-    ? `Winner! You took it ${G.playerScore}–${G.oppScore}.`
-    : `Opponent wins ${G.oppScore}–${G.playerScore}. Keep training!`;
-  const pct  = G.totalShots>0?Math.round(G.totalPerfect/G.totalShots*100):0;
-  const aPct = G.totalShots>0?Math.round(G.totalAttackable/G.totalShots*100):0;
+  const won=G.playerScore>G.oppScore;
+  document.getElementById('go-title').textContent=won?'YOU WIN!':'GOOD EFFORT';
+  document.getElementById('go-score').textContent=`${G.playerScore} – ${G.oppScore}`;
+  document.getElementById('go-msg').textContent=won?`You took it ${G.playerScore}–${G.oppScore}!`:`Opponent wins ${G.oppScore}–${G.playerScore}. Keep training!`;
+  const p=G.totalShots>0,pp=p?Math.round(G.totalPerfect/G.totalShots*100):0,ap=p?Math.round(G.totalAttackable/G.totalShots*100):0;
   document.getElementById('go-stats').innerHTML=`
   <div class="go-stat-row"><span class="go-stat-lbl">Total shots</span><span class="go-stat-val">${G.totalShots}</span></div>
-  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--success)">Perfect</span><span class="go-stat-val" style="color:var(--success)">${G.totalPerfect} (${pct}%)</span></div>
-  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--warning)">Attackable</span><span class="go-stat-val" style="color:var(--warning)">${G.totalAttackable} (${aPct}%)</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--success)">Perfect</span><span class="go-stat-val" style="color:var(--success)">${G.totalPerfect} (${pp}%)</span></div>
+  <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--warning)">Attackable</span><span class="go-stat-val" style="color:var(--warning)">${G.totalAttackable} (${ap}%)</span></div>
   <div class="go-stat-row"><span class="go-stat-lbl" style="color:var(--danger)">Miss</span><span class="go-stat-val" style="color:var(--danger)">${G.totalMiss}</span></div>
-  <div class="go-stat-row"><span class="go-stat-lbl">Rallies played</span><span class="go-stat-val">${G.rallyNum-1}</span></div>`;
+  <div class="go-stat-row"><span class="go-stat-lbl">Rallies</span><span class="go-stat-val">${G.rallyNum-1}</span></div>`;
 }
 
-// ── LOG ───────────────────────────────────────────────────────────────────────
-function logShot(who, shot, target, roll, outcome, fromPos, toPos){
-  sessionLog.push({who,shot,target,roll,outcome,fromPos,toPos,rallyNum:G.rallyNum,shotNum:G.rallyShot});
+// ── LOG ──────────────────────────────────────────────────────────────────────
+function logShot(who,shot,target,roll,outcome,from,to){
+  sessionLog.push({who,shot,target,roll,outcome,from,to,rallyNum:G.rallyNum,shotNum:G.rallyShot});
   renderLog();
 }
-
 function renderLog(){
-  const el=document.getElementById('log-entries');
-  if(!el) return;
-  el.innerHTML=sessionLog.slice().reverse().slice(0,30).map((e,i)=>`
-  <div class="log-entry ${e.outcome}">
-    <span class="log-n">${sessionLog.length-i}</span>
-    <span class="log-txt ${e.outcome[0]}">${e.who} · R${e.rallyNum}·S${e.shotNum} · ${shotLabel(e.shot)}→${e.target} · Roll ${e.roll} → <strong>${e.outcome.toUpperCase()}</strong> (${e.fromPos}→${e.toPos})</span>
-  </div>`).join('');
+  const el=document.getElementById('log-entries');if(!el)return;
+  el.innerHTML=sessionLog.slice().reverse().slice(0,20).map((e,i)=>`
+  <div class="log-entry"><span class="log-n">${sessionLog.length-i}</span>
+  <span class="log-txt ${e.outcome[0]}">${e.who}·R${e.rallyNum}·${shotLabel(e.shot)}→${e.target}·${e.roll}→<strong>${e.outcome.toUpperCase()}</strong></span></div>`).join('');
 }
-
 let logOpen=false;
 function toggleLog(){
   logOpen=!logOpen;
-  const el=document.getElementById('log-entries');
-  if(el) el.style.display=logOpen?'flex':'none';
-  const arr=document.getElementById('log-arrow');
-  if(arr) arr.textContent=logOpen?'▼':'▶';
-  if(logOpen) renderLog();
+  const el=document.getElementById('log-entries');if(el)el.style.display=logOpen?'flex':'none';
+  const a=document.getElementById('log-arrow');if(a)a.textContent=logOpen?'▼':'▶';
+  if(logOpen)renderLog();
 }
 </script>
 </body>
