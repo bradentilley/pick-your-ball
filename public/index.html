@@ -75,6 +75,35 @@ html,body{height:100%;background:#2d7a3d;color:var(--text);font-family:'Inter',s
   padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px);
   display:flex;flex-direction:column;gap:10px
 }
+
+/* ── DESKTOP SIDE-BY-SIDE LAYOUT ── */
+@media(min-width:700px){
+  #screen-game{
+    display:grid;
+    grid-template-columns:1fr 380px;
+    grid-template-rows:auto 1fr auto;
+    grid-template-areas:"score score" "court panel" "log log"
+  }
+  .score-bar{grid-area:score}
+  #court-wrap{
+    grid-area:court;
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden
+  }
+  #court-svg{
+    width:auto !important;
+    height:calc(100dvh - 110px) !important;
+    max-height:none !important;
+    max-width:100%
+  }
+  #action-panel{
+    grid-area:panel;
+    min-height:0;
+    border-left:1px solid var(--border)
+  }
+  .log-wrap{grid-area:log}
+}
 .phase-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;line-height:1}
 .phase-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
