@@ -381,13 +381,9 @@ function resetRally(){
   G.oppPos = G.playerServing ? 'K' : 'D'; // if player serves: opp advances to K; if opp serves: both start D then opp stays at D
   // Serve sequence: server D, returner goes to K after return
   // We auto-handle: after serve, server stays at D, returner at K
-  if(G.playerServing){
-    G.playerPos = 'D';
-    G.oppPos = 'K';
-  } else {
-    G.playerPos = 'K';
-    G.oppPos = 'D';
-  }
+  // Both start at D on serve — returner advances to K after return (handled in startRally)
+  G.playerPos = 'D';
+  G.oppPos = 'D';
   G.playerRush = 'comfortable';
   G.oppRush = 'comfortable';
   G.nextPlayerComfortable = false;
@@ -402,7 +398,7 @@ function startGame(){
     playerScore: 0, oppScore: 0,
     skillLevel: document.querySelector('.skill-btn.active')?.dataset.skill || 'intermediate',
     playerServing: true,
-    playerPos: 'D', oppPos: 'K',
+    playerPos: 'D', oppPos: 'D',
     playerRush: 'comfortable', oppRush: 'comfortable',
     nextPlayerComfortable: false, nextOppComfortable: false,
     rallyNum: 1, rallyShot: 0,
@@ -482,7 +478,7 @@ function renderServe(){
     <div class="serve-emoji">${serving?'🏓':'⚡'}</div>
     <div class="serve-title">${serving?'YOUR SERVE':'OPPONENT SERVES'}</div>
     <div class="serve-lines">
-      <div class="serve-line"><span class="serve-dot">▸</span>${serving?'You start at Deep (D)':'Opponent starts at Deep (D)'}</div>
+      <div class="serve-line"><span class="serve-dot">▸</span>Both players start at Deep (D)</div>
       <div class="serve-line"><span class="serve-dot">▸</span>${serving?'Opponent returns and advances to Kitchen (K)':'You return and advance to Kitchen (K)'}</div>
       <div class="serve-line"><span class="serve-dot">▸</span>${serving?'You stay at Deep — two-bounce rule pins you back':'Opponent stays at Deep — two-bounce rule pins them back'}</div>
     </div>
@@ -491,6 +487,8 @@ function renderServe(){
 }
 
 function startRally(){
+  // Returner advances to K after the return; server stays at D
+  if(G.playerServing){ G.oppPos='K'; } else { G.playerPos='K'; }
   G.phase = 'player-shot';
   G.rallyShot = 1;
   render();
@@ -1003,12 +1001,8 @@ function renderPoint(){
 }
 
 function nextRally(){
-  // Reset positions for new rally (serve sequence)
-  if(G.playerServing){
-    G.playerPos='D'; G.oppPos='K';
-  } else {
-    G.playerPos='K'; G.oppPos='D';
-  }
+  // Both start at D on serve — returner advances to K in startRally()
+  G.playerPos='D'; G.oppPos='D';
   G.playerRush='comfortable'; G.oppRush='comfortable';
   G.nextPlayerComfortable=false; G.nextOppComfortable=false;
   G.rallyShot=0;
